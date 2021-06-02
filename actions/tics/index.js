@@ -32,7 +32,8 @@ async function analyseTiCSBranch() {
             }
 
             console.log(stdout)
-            createPrComment();
+            //createPrComment();
+            getQualityGates();
             
         });
 
