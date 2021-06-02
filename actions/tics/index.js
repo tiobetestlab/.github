@@ -19,7 +19,7 @@ async function analyseTiCSBranch() {
         var execString = 'TICS -qg ';
         execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
         execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
-        execString += ticsConfig.branchDir ? `-cdtoken ${ticsConfig.branchDir} ` : '';
+        execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : '';
         
         console.log(execString);
         
