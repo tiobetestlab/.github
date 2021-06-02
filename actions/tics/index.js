@@ -116,6 +116,7 @@ function doHttpRequest(path) {
           res.on('end', () => {
             //if (res.statusCode < 200 || res.statusCode >= 300) {
                 try {
+                  console.log(body);
                   body = JSON.parse(Buffer.concat(body).toString());
                 } catch(e) {
                   console.log("Result error: ", e)
