@@ -15,7 +15,7 @@ if(config.eventpayload.action !== 'closed') {
 async function analyseTiCSBranch() {
     try {
         console.log(`Analysing new pull request for project ${ticsConfig.projectName} and ${ticsConfig.branchName} and ${ticsConfig.branchDir}.`)
-        exec(`TICS -project ${ticsConfig.projectName} -viewer -cdtoken githubToken -qg -exitsqa ${ticsConfig.branchDir}`, (error, stdout, stderr) => {
+        exec(`TICS -project ${ticsConfig.projectName} -viewer -cdtoken ${ticsConfig.viewerToken} -qg -exitsqa ${ticsConfig.branchDir}`, (error, stdout, stderr) => {
             if (error || stderr) {
                 console.log(error)
                 console.log(stderr)
@@ -36,8 +36,8 @@ async function analyseTiCSBranch() {
 
 async function getQualityGates() {
     try {
-        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(danai:githubToken),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
-        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(danai:githubToken),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
+        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
+        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
@@ -56,7 +56,7 @@ async function getQualityGates() {
             })
         })
 
-        let summary = `#### TICS Analysis \r\n\r\n ${gate_status}\r\n\r\n Run for : ${qualityGateObj.subject}\r\n\r\n* * * * *\r\n\r\n#### TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(danai:githubToken),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
+        let summary = `#### TICS Analysis \r\n\r\n ${gate_status}\r\n\r\n Run for : ${qualityGateObj.subject}\r\n\r\n* * * * *\r\n\r\n#### TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
         return summary;
 
     } catch (error) {
