@@ -1,8 +1,5 @@
 {
     "name": "Organization Workflow",
     "description": "Organization CI workflow template.",
-    "iconName": "cplus.svg",
-    "categories": [
-        "Code Quality"
-    ],
+    "iconName": "cplus.svg"
 }
