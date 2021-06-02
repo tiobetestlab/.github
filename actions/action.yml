@@ -1,0 +1,13 @@
+name: 'TiCS Github Action'
+author: 'TIOBE'
+description: 'Scan and analyse your codebase using TiCS'
+branding:
+  icon: 'flag'  
+  color: 'blue'
+inputs:
+  GITHUB_TOKEN:
+    description: 'GitHub token'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
