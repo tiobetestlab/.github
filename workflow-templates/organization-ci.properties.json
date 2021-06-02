@@ -1,13 +1,8 @@
 {
     "name": "Organization Workflow",
     "description": "Organization CI workflow template.",
-    "iconName": "example-icon",
+    "iconName": "cplus.svg",
     "categories": [
-        "Go"
+        "Code Quality"
     ],
-    "filePatterns": [
-        "package.json$",
-        "^Dockerfile",
-        ".*\\.md$"
-    ]
 }
