@@ -16,7 +16,12 @@ async function analyseTiCSBranch() {
     try {
         console.log(`Analysing new pull request for project ${ticsConfig.projectName} and ${ticsConfig.branchName} and ${ticsConfig.branchDir}.`)
         
-        exec(`TICS -project ${ticsConfig.projectName} -cdtoken ${ticsConfig.viewerToken} -qg tics_dock.py`, (error, stdout, stderr) => {
+        execString = '-qg '
+        execString =+ ${ticsConfig.projectName} ? `-project ${ticsConfig.projectName} ` : '';
+        execString =+ ${ticsConfig.viewerToken} ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
+        execString =+ 'tics_dock.py';
+        
+        exec(execString, (error, stdout, stderr) => {
             if (error || stderr) {
                 console.log(error)
                 console.log(stderr)
