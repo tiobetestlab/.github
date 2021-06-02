@@ -45,7 +45,7 @@ async function analyseTiCSBranch() {
 async function getQualityGates() {
     try {
         console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
-        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
+        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(marvi:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
@@ -53,19 +53,19 @@ async function getQualityGates() {
             return response;
         });
 
-        let qualityGateObj = JSON.parse(qualityGates.body)
-        let gate_status = qualityGateObj.passed === true ? 'Passed ' : 'Failed '
-        let gates_conditions = '';
+//         let qualityGateObj = JSON.parse(qualityGates.body)
+//         let gate_status = qualityGateObj.passed === true ? 'Passed ' : 'Failed '
+//         let gates_conditions = '';
 
-        qualityGateObj.gates.map((gate) => {
-            gate.conditions.map((condition) => {
-                let condition_status = condition.skipped === true ? ':warning: ' : (condition.passed === true ? ':heavy_check_mark: ' : ':x: ');
-                gates_conditions = gates_conditions + condition_status + " " + condition.descriptionText + '\r\n';  
-            })
-        })
+//         qualityGateObj.gates.map((gate) => {
+//             gate.conditions.map((condition) => {
+//                 let condition_status = condition.skipped === true ? ':warning: ' : (condition.passed === true ? ':heavy_check_mark: ' : ':x: ');
+//                 gates_conditions = gates_conditions + condition_status + " " + condition.descriptionText + '\r\n';  
+//             })
+//         })
 
-        let summary = `#### TICS Analysis \r\n\r\n ${gate_status}\r\n\r\n Run for : ${qualityGateObj.subject}\r\n\r\n* * * * *\r\n\r\n#### TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
-        return summary;
+//         let summary = `#### TICS Analysis \r\n\r\n ${gate_status}\r\n\r\n Run for : ${qualityGateObj.subject}\r\n\r\n* * * * *\r\n\r\n#### TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
+//         return summary;
 
     } catch (error) {
         core.setFailed(error);
