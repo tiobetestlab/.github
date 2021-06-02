@@ -8,7 +8,6 @@ const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index'
 const {createIssueComment, deleteIssueComments} = require('./src/github/api/issues/index');
 
 if(config.eventpayload.action !== 'closed') {
-    deleteIssueComments();
     analyseTiCSBranch();
 }
 
