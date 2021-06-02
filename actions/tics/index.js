@@ -102,10 +102,12 @@ function doHttpRequest(path) {
           })
 
           res.on('end', () => {
-           console.log(JSON.parse(body));
-           resolve(JSON.parse(body));
+            console.log("status code: ", res.statusCode);
+              if (res.statusCode === 200) {
+                console.log(JSON.parse(body));
+                resolve(JSON.parse(body));
+              }
           })
-
         });
 
         req.on('error', error => {
