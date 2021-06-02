@@ -35,20 +35,6 @@ async function analyseTiCSBranch() {
             createPrComment();
             
         });
-        /*
-        exec(`TICS -version`, (error, stdout, stderr) => {
-            if (error || stderr) {
-                console.log(error)
-                console.log(stderr)
-                core.setFailed(error);
-                return;
-            }
-
-            console.log(stdout)
-            //createPrComment();
-            
-        });
-        */
 
     }  catch (error) {
        core.setFailed(error.message);
