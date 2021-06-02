@@ -51,6 +51,7 @@ async function getQualityGates() {
                 statusCode: 200,
                 body: JSON.stringify(data),
             };
+            console.log("Quality Gate response ", response);
             return response;
         });
 
@@ -96,21 +97,13 @@ function doHttpRequest(path) {
         let req = https.get(path, res => {
 
           let body = [];
-          res.on('data', d => {
-            body.push(d);
+          res.on('data', (chunk) => {
+            body += chunk;
           })
 
           res.on('end', () => {
-            //if (res.statusCode < 200 || res.statusCode >= 300) {
-                try {
-                  console.log(body);
-                  body = JSON.parse(Buffer.concat(body).toString());
-                } catch(e) {
-                  console.log("Result error: ", e)
-                  reject(e);
-                }
-                resolve(body)
-            //}
+           console.log(JSON.parse(body));
+           resolve(JSON.parse(body));
           })
 
         });
