@@ -15,7 +15,7 @@ if(config.eventpayload.action !== 'closed') {
 async function analyseTiCSBranch() {
     try {
         console.log(`Analysing new pull request for project ${ticsConfig.projectName} and ${ticsConfig.branchName} and ${ticsConfig.branchDir}.`)
-        exec(`TICS -project ${ticsConfig.projectName} -viewer -cdtoken ${ticsConfig.viewerToken} -qg -exitsqa ${ticsConfig.branchDir}`, (error, stdout, stderr) => {
+        exec(`TICS -project ${ticsConfig.projectName} -cdtoken ${ticsConfig.viewerToken} -qg ${ticsConfig.branchDir}`, (error, stdout, stderr) => {
             if (error || stderr) {
                 console.log(error)
                 console.log(stderr)
