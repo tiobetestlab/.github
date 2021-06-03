@@ -98,7 +98,7 @@ async function createPrComment() {
 
             return result;
         }).then((result) => {
-            getQualityGates(result).then((data) => {
+            getQualityGates(result.username).then((data) => {
                 commentBody = {
                     body : data 
                 };
