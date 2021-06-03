@@ -2,6 +2,8 @@
 const https = require('http');
 const { exec } = require("child_process");
 const core = require('@actions/core');
+const util = require('util');
+const execute = util.promisify(require('child_process').exec);
 
 const { config, ticsConfig } = require('./src/github/configuration');
 const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
@@ -33,7 +35,6 @@ async function analyseTiCSBranch() {
 
             console.log(stdout)
             createPrComment();
-            getQualityGates();
             
         });
 
@@ -43,10 +44,21 @@ async function analyseTiCSBranch() {
 }
 
 
-async function getQualityGates() {
+async function getUserName() {
     try {
-        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
-        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
+        const {stdout, stderr} = await execute('echo %username%')
+        return stdout;
+
+    }  catch (error) {
+       core.setFailed(error.message);
+    }
+}
+
+
+async function getQualityGates(username) {
+    try {
+        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(username:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
+        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(username:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
@@ -78,13 +90,23 @@ async function createPrComment() {
     try {
         let commentBody = {};
         
-        getQualityGates().then((data) => {
-            commentBody = {
-                body : data 
-            };
+        getUserName().then((result) => {
+            result = {
+                username: result.trim()
+            }
+            console.log("Retrieving username...", result);
 
-            createIssueComment(commentBody)
+            return result;
+        }).then((result) => {
+            getQualityGates(result).then((data) => {
+                commentBody = {
+                    body : data 
+                };
+
+                createIssueComment(commentBody)
+            })
         });
+        
 
     }  catch (error) {
         core.setFailed(error.message);
