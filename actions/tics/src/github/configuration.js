@@ -22,7 +22,8 @@ let ticsConfig = {
     ticsViewerUrl: core.getInput('ticsViewerUrl'),         
     checkQualityGate: core.getInput('checkQualityGate'),                           
     failIfQualityGateFails: core.getInput('failIfQualityGateFails'),
-    viewerToken: core.getInput('clientToken')
+    viewerToken: core.getInput('clientToken'),
+    ticsAuthToken: core.getInput('ticsAuthToken')
 
 }
 
