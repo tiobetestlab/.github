@@ -68,13 +68,13 @@ async function getQualityGates(username) {
         });
 
         let qualityGateObj = JSON.parse(qualityGates.body)
-        let gate_status = qualityGateObj.passed === true ? '## :white_check_mark: Passed ' : '## :heavy_check_mark: Failed'
+        let gate_status = qualityGateObj.passed === true ? '### :white_check_mark: Passed ' : '### :heavy_check_mark: Failed'
         let gates_conditions = '';
 
         qualityGateObj.gates && qualityGateObj.gates.map((gate) => {
             gate.conditions.map((condition) => {
                 if(condition.skipped !== true) {
-                    let condition_status = condition.passed === true ? ':heavy_check_mark: ' : ':x: ';
+                    let condition_status = condition.passed === true ? '> :heavy_check_mark: ' : '> :x: ';
                     gates_conditions = gates_conditions + condition_status + " " + condition.descriptionText + '\r\n';  
                 }
             })
