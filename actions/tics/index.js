@@ -80,7 +80,7 @@ async function getQualityGates(username) {
             })
         })
 
-        let summary = `## TICS Analysis \r\n\r\n Run for : ${ticsConfig.projectName} ${GITHUB_BASE_REF}\r\n\r\n* * * * *\r\n\r\n## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
+        let summary = `## TICS Analysis \r\n\r\n > Run for : ${ticsConfig.projectName} \r\n\r\n* * * * *\r\n\r\n## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
         return summary;
 
     } catch (error) {
