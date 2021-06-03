@@ -95,7 +95,7 @@ function doHttpRequest(url) {
     return new Promise((resolve, reject) => {
         const options = {
           headers: {
-            'Authorization' : 'Basic ' + new Buffer(ticsConfig.ticsAuthToken).toString('base64')
+            'Authorization' : 'Basic ' + ticsConfig.ticsAuthToken
           }
         }
                        
