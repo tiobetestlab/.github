@@ -1,6 +1,19 @@
 name: 'TiCS Github Action'
 author: 'TIOBE'
 description: 'Scan and analyse your codebase using TiCS'
+inputs:
+  projectName:  # id of input
+    description: 'Name of the TICS project'
+  branchName:  # id of input
+    description: 'Name of the branch in TICS'
+  branchDir:  # id of input
+    description: 'Location of the files to analyze'
+  ticsViewerUrl:  # id of input
+    description: 'URL to the TICS Viewer'
+  ticsAuthToken:  # id of input
+    description: 'Authentication token to connect to the TICS Viewer'
+  clientToken:  # id of input
+    description: 'Reference ID for this specific run'
 branding:
   icon: 'flag'  
   color: 'blue'
