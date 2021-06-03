@@ -91,10 +91,16 @@ async function createPrComment() {
     }
 }
 
-function doHttpRequest(path) {
+function doHttpRequest(url) {
     return new Promise((resolve, reject) => {
-
-        let req = https.get(path, res => {
+        const options = {
+          headers: {
+            'Authorization' : 'Basic ' + new Buffer(ticsConfig.ticsAuthToken).toString('base64')
+          }
+        }
+                       
+        console.log(options)
+        let req = https.get(url, options, (res) => {
 
           let body = [];
           res.on('data', (chunk) => {
