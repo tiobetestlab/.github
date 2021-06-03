@@ -68,7 +68,7 @@ async function getQualityGates(username) {
         });
 
         let qualityGateObj = JSON.parse(qualityGates.body)
-        let gate_status = qualityGateObj.passed === true ? '### :white_check_mark: Passed ' : '### :heavy_check_mark: Failed'
+        let gate_status = qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :heavy_check_mark: Failed'
         let gates_conditions = '';
 
         qualityGateObj.gates && qualityGateObj.gates.map((gate) => {
@@ -80,7 +80,7 @@ async function getQualityGates(username) {
             })
         })
 
-        let summary = `## TICS Analysis \r\n\r\n Run for : ${qualityGateObj.subject}\r\n\r\n* * * * *\r\n\r\n## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
+        let summary = `## TICS Analysis \r\n\r\n Run for : ${ticsConfig.projectName} ${env.GITHUB_BASE_REF}\r\n\r\n* * * * *\r\n\r\n## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatusDetails?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
         return summary;
 
     } catch (error) {
