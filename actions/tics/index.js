@@ -120,7 +120,8 @@ function doHttpRequest(url) {
         const options = {
           headers: {
             'Authorization' : 'Basic ' + ticsConfig.ticsAuthToken
-          }
+          },
+          followAllRedirects: true
         }
                        
         console.log(options)
@@ -133,10 +134,14 @@ function doHttpRequest(url) {
 
           res.on('end', () => {
             console.log("status code: ", res.statusCode);
-              if ((res.statusCode === 200) || (res.statusCode === 302)) {
+              if (res.statusCode === 200) {
                 console.log(JSON.parse(body));
                 resolve(JSON.parse(body));
               }
+              //else if (res.statusCode === 302) {
+              //  console.log(JSON.parse(body));
+              //  resolve(JSON.parse(body));
+              //}
           })
         });
 
