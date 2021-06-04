@@ -133,7 +133,7 @@ function doHttpRequest(url) {
 
           res.on('end', () => {
             console.log("status code: ", res.statusCode);
-              if (res.statusCode === 200) {
+              if ((res.statusCode === 200) || (res.statusCode === 302)) {
                 console.log(JSON.parse(body));
                 resolve(JSON.parse(body));
               }
