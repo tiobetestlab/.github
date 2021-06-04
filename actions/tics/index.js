@@ -138,10 +138,6 @@ function doHttpRequest(url) {
                 console.log(JSON.parse(body));
                 resolve(JSON.parse(body));
               }
-              else if (res.statusCode === 302) {
-                console.log(body);
-                //resolve(JSON.parse(body));
-              }
           })
         });
 
