@@ -18,7 +18,7 @@ async function analyseTiCSBranch() {
     try {
         console.log(`Analysing new pull request for project ${ticsConfig.projectName} and ${ticsConfig.branchName} and ${ticsConfig.branchDir}.`)
         
-        var execString = 'TICS -qg -calc ALL';
+        var execString = 'TICS -qg';
         execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
         execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
         execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
