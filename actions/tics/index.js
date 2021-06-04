@@ -1,5 +1,5 @@
 
-const https = require('http');
+const https = require('https');
 const { exec } = require("child_process");
 const core = require('@actions/core');
 const util = require('util');
