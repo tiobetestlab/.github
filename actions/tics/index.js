@@ -34,13 +34,10 @@ async function analyseTiCSBranch() {
             }
 
             console.log(stdout);            
-            createPrComment();
-            
             console.log('THE URL TO THE EXPLORER');
-            //let explorerUrl = stdout.match(/Explorer\s=*\s(http(s)?.*)\n/g);
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            console.log(explorerUrl);
-            console.log('-----------------------');
+            console.log(explorerUrl[1]);
+            createPrComment(explorerUrl[1]);
         });
 
     }  catch (error) {
@@ -85,7 +82,7 @@ async function getQualityGates(username) {
             })
         })
 
-        let summary = `## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}Explorer.html#axes=?ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
+        let summary = `## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions}\n`
         return summary;
 
     } catch (error) {
@@ -93,7 +90,7 @@ async function getQualityGates(username) {
     }
 }
 
-async function createPrComment() {
+async function createPrComment(explorerUrl) {
     try {
         let commentBody = {};
         
@@ -109,8 +106,8 @@ async function createPrComment() {
                 commentBody = {
                     body : data 
                 };
-
-                createIssueComment(commentBody)
+                
+                createIssueComment(commentBody + `[See results in TICS Viewer](${explorerUrl})\r\n`)
             })
         });
         
