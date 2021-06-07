@@ -34,10 +34,10 @@ async function analyseTiCSBranch() {
                 //return;
             }
 
-            console.log(stdout);
-            console.log('THE URL TO THE EXPLORER');
+            console.log(stdout);            
             createPrComment();
             
+            console.log('THE URL TO THE EXPLORER');
             let explorerUrl = stdout.search('Explorer\n=*\n(http(s)?:\/\/.*)\n');
             console.log(explorerUrl)
         });
