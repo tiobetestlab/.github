@@ -33,10 +33,9 @@ async function analyseTiCSBranch() {
                 //return;
             }
 
-            //console.log(stdout);            
-            console.log('THE URL TO THE EXPLORER');
+            console.log(stdout);            
+            
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            console.log(explorerUrl[1]);
             createPrComment(explorerUrl[1]);
         });
 
@@ -65,7 +64,7 @@ async function getQualityGates(username) {
                 statusCode: 200,
                 body: JSON.stringify(data),
             };
-            console.log("Quality Gate response ", response);
+            //console.log("Quality Gate response ", response);
             return response;
         });
 
@@ -137,7 +136,7 @@ function doHttpRequest(url) {
           res.on('end', () => {
             console.log("status code: ", res.statusCode);
               if (res.statusCode === 200) {
-                console.log(JSON.parse(body));
+                //console.log(JSON.parse(body));
                 resolve(JSON.parse(body));
               }
           })
