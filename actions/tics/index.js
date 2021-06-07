@@ -106,7 +106,7 @@ async function createPrComment(explorerUrl) {
                 commentBody = {
                     body : data 
                 };
-                commentBody.data += `[See results in TICS Viewer](${explorerUrl})\r\n`;
+                commentBody.body += `[See results in TICS Viewer](${explorerUrl})\r\n`;
                 createIssueComment(commentBody)
             })
         });
