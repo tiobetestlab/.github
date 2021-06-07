@@ -154,7 +154,7 @@ function doHttpRequest(url) {
 }
 
 async function getQualityGateURL() {
-    let response = await fetch(${ticsConfig.ticsViewerUrl} + '/api/public/v1/ClientData?cdt=' + ${username}:${ticsConfig.viewerToken});
+    let response = await fetch('${ticsConfig.ticsViewerUrl}api/public/v1/ClientData?cdt=${username}:${ticsConfig.viewerToken}');
     let data = await response.json();
     console.log(data);
     return data;
