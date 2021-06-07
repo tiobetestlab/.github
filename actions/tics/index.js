@@ -68,7 +68,7 @@ async function getQualityGates(username) {
         });
 
         let qualityGateObj = JSON.parse(qualityGates.body)
-        let gate_status = qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :heavy_check_mark: Failed'
+        let gate_status = qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :x: Failed'
         let gates_conditions = '';
 
         qualityGateObj.gates && qualityGateObj.gates.map((gate) => {
