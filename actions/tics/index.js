@@ -38,7 +38,7 @@ async function analyseTiCSBranch() {
             
             console.log('THE URL TO THE EXPLORER');
             //let explorerUrl = stdout.match(/Explorer\s=*\s(http(s)?.*)\n/g);
-            let explorerUrl = stdout.match(/Explorer\s=*/g);
+            let explorerUrl = stdout.match(/Explorer\s=*\s/g);
             console.log(explorerUrl);
             console.log('-----------------------');
         });
