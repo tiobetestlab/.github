@@ -34,10 +34,11 @@ async function analyseTiCSBranch() {
                 //return;
             }
 
-            console.log(stdout)
+            console.log(stdout);
+            console.log('THE URL TO THE EXPLORER');
             createPrComment();
             
-            let explorerUrl = stdout.search('Quality gate result\n=*\n(http(s)?:\/\/.*)\n');
+            let explorerUrl = stdout.search('Explorer\n=*\n(http(s)?:\/\/.*)\n');
             console.log(explorerUrl)
         });
 
