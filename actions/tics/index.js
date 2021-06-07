@@ -30,7 +30,7 @@ async function analyseTiCSBranch() {
                 console.log(error)
                 console.log(stderr)
                 core.setFailed(error);
-                return;
+                //return;
             }
 
             console.log(stdout)
