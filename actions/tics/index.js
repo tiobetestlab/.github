@@ -80,6 +80,7 @@ async function getQualityGates(username) {
             })
         })
 
+        let gateUrl = getQualityGateURL();
         let summary = `## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions} \n[See results in TICS Viewer](${ticsConfig.ticsViewerUrl}Explorer.html#axes=?ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName}))\r\n`
         return summary;
 
@@ -150,4 +151,11 @@ function doHttpRequest(url) {
 
     });
     
+}
+
+function getQualityGateURL() {
+    let response = await fetch(${ticsConfig.ticsViewerUrl} + '/api/public/v1/ClientData?cdt=' + ${username}:${ticsConfig.viewerToken});
+    let data = await response.json();
+    console.log(data);
+    return data;
 }
