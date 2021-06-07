@@ -38,8 +38,7 @@ async function analyseTiCSBranch() {
             createPrComment();
             
             console.log('THE URL TO THE EXPLORER');
-            const regex = /Explorer\s=*\s(http(s)?.*)\n/g;
-            let explorerUrl = stdout.match(regex);
+            let explorerUrl = stdout.match(/Explorer\s=*\s(http(s)?.*)\n/g);
             console.log(explorerUrl);
             console.log('-----------------------');
         });
