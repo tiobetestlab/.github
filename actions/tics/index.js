@@ -29,7 +29,6 @@ async function analyseTiCSBranch() {
             if (error || stderr) {
                 console.log(error)
                 console.log(stderr)
-                console.log(stdout)
                 core.setFailed(error);
                 //return;
             }
