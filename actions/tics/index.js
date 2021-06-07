@@ -40,7 +40,8 @@ async function analyseTiCSBranch() {
             console.log('THE URL TO THE EXPLORER');
             const regex = /Explorer\s=*\s(http(s)?.*)\n/g;
             let explorerUrl = stdout.match(regex);
-            console.log(explorerUrl[0]);
+            console.log(explorerUrl);
+            console.log('-----------------------');
         });
 
     }  catch (error) {
