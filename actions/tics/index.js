@@ -27,7 +27,7 @@ async function analyseTiCSBranch() {
         console.log(`Invoking: ${execString}`);
         
         let gitDiff = ''
-        exec('git diff --name-only', (error, stdout, stderr) => {
+        exec('git diff --name-only origin/master', (error, stdout, stderr) => {
             gitDiff = stdout;
             console.log(gitDiff);
         });
