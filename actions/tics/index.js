@@ -26,10 +26,10 @@ async function analyseTiCSBranch() {
         
         console.log(`Invoking: ${execString}`);
         
-        let gitDiff = ''
+        let changeSet = ''
         exec('git diff --name-only origin/master', (error, stdout, stderr) => {
-            gitDiff = stdout;
-            console.log(gitDiff);
+            changeSet = stdout;
+            console.log(changeSet);
         });
                 
         exec(execString, (error, stdout, stderr) => {
@@ -43,7 +43,7 @@ async function analyseTiCSBranch() {
             console.log(stdout);            
             
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            createPrComment(explorerUrl[1], gitDiff);
+            createPrComment(explorerUrl[1], changeSet);
         });
 
     }  catch (error) {
@@ -96,7 +96,7 @@ async function getQualityGates(username) {
     }
 }
 
-async function createPrComment(explorerUrl) {
+async function createPrComment(explorerUrl, changeSet) {
     try {
         let commentBody = {};
         
@@ -112,7 +112,7 @@ async function createPrComment(explorerUrl) {
                 commentBody = {
                     body : data 
                 };
-                commentBody.body += `[See results in TICS Viewer](${explorerUrl})\r\n`;
+                commentBody.body += `[See results in TICS Viewer](${explorerUrl})\r\n The following file(s) have been checked:\r\n${changeSet}`;
                 createIssueComment(commentBody)
             })
         });
