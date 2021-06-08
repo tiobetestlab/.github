@@ -41,8 +41,8 @@ async function analyseTiCSBranch() {
                 core.setFailed(error);
                 
                 let errorList = stdout.match(/\[ERROR.*/g);
-                errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\b #### The following errors have occured during analysis:\r\n\r\n`;
-                errorList.forEach(item => errorMessage += `> ${item}\r\n\r\n`);
+                errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
+                errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`);
                 
                 core.setFailed(errorMessage);
                 //return;
