@@ -14,7 +14,7 @@ inputs:
     description: 'Authentication token to connect to the TICS Viewer'
   clientToken:  # id of input
     description: 'Reference ID for this specific run'
-  tmpdir:  # id of input
+  tmpDir:  # id of input
     description: 'Location to store debug information'
 branding:
   icon: 'flag'  
