@@ -128,7 +128,7 @@ async function createPrComment(explorerUrl, changeSet, errorMessage) {
                 
                 /* Override in case of issues */
                 if (errorMessage) {
-                    commentBody.body = errorMessage + '\r\n\r\b' + commentBody.body
+                    commentBody.body = errorMessage + '\r\n\r\n' + commentBody.body
                 }
                 
                 createIssueComment(commentBody)
