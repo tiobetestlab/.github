@@ -16,7 +16,7 @@ if(config.eventpayload.action !== 'closed') {
 
 async function analyseTiCSBranch() {
     try {
-        console.log(`Analysing new pull request for project ${ticsConfig.projectName} and ${ticsConfig.branchName} and ${ticsConfig.branchDir}.`)
+        console.log(`Analysing new pull request for project ${ticsConfig.projectName}.`)
         
         var execString = 'TICS -qg -calc ALL -changed ';
         execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
@@ -24,8 +24,14 @@ async function analyseTiCSBranch() {
         execString += ticsConfig.tmpdir ? `-tmpdir ${ticsConfig.tmpdir} ` : '';
         execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
         
-        console.log(execString);
+        console.log(`Invoking: ${execString}`);
         
+        let gitDiff = ''
+        exec('git diff --name-only', (error, stdout, stderr) => {
+            gitDiff = stdout;
+            console.log(gitDiff);
+        });
+                
         exec(execString, (error, stdout, stderr) => {
             if (error || stderr) {
                 console.log(error)
@@ -37,7 +43,7 @@ async function analyseTiCSBranch() {
             console.log(stdout);            
             
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            createPrComment(explorerUrl[1]);
+            createPrComment(explorerUrl[1], gitDiff);
         });
 
     }  catch (error) {
