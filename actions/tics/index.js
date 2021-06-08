@@ -26,12 +26,8 @@ async function analyseTiCSBranch() {
         
         console.log(`Invoking: ${execString}`);
         
-        let changeSet = '';
         let errorMessage = '';
-        exec('git diff --name-only origin/master..HEAD', (error, stdout, stderr) => {
-            changeSet = stdout;
-            console.log(changeSet);
-        });
+        let changeSet = getChangeSet();
                 
         exec(execString, (error, stdout, stderr) => {
             if (error || stderr) {
@@ -175,4 +171,14 @@ function doHttpRequest(url) {
         req.end();
 
     });
+}
+
+function getChangeSet() {
+    let changeSet = '';
+    exec('git diff --name-only origin/master..HEAD', (error, stdout, stderr) => {
+        changeSet = stdout;
+        console.log(changeSet);
+    });
+    
+    return changeSet;
 }
