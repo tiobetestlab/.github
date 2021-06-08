@@ -89,6 +89,11 @@ async function getQualityGates(username) {
         })
 
         let summary = `## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions}\n`
+        
+        if(qualityGateObj.passed === false) {
+            core.setFailed('summary');
+        }
+        
         return summary;
 
     } catch (error) {
