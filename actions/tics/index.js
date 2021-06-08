@@ -21,7 +21,7 @@ async function analyseTiCSBranch() {
         var execString = 'TICS -qg -calc ALL -changed ';
         execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
         execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
-        execString += ticsConfig.tmpdir ? `-tmpdir ${ticsConfig.tmpdir} ` : '';
+        execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';
         execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
         
         console.log(`Invoking: ${execString}`);
