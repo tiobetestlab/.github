@@ -40,7 +40,10 @@ async function analyseTiCSBranch() {
                 core.setFailed(error);
                 
                 let errorList = stdout.match(/\[ERROR.*/g);
-                errorMessage = `## TICS Analysis\r\n\r\n #### The following errors have occured during analysis:\r\n\r\n> ${errorList}`;
+                errorMessage = `## TICS Analysis\r\n\r\n #### The following errors have occured during analysis:\r\n\r\n> ${errorList}`;\
+                errorList.map(item) => {
+                    errorMessage += `${item}`\r\n;
+                };
                 core.setFailed(errorMessage);
                 //return;
             }
