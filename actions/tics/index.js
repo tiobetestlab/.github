@@ -26,7 +26,8 @@ async function analyseTiCSBranch() {
         
         console.log(`Invoking: ${execString}`);
         
-        let changeSet = ''
+        let changeSet = '';
+        let errorMessage = '';
         exec('git diff --name-only origin/master..HEAD', (error, stdout, stderr) => {
             changeSet = stdout;
             console.log(changeSet);
@@ -39,7 +40,7 @@ async function analyseTiCSBranch() {
                 core.setFailed(error);
                 
                 let errorList = stdout.match(/\[ERROR.*/g);
-                let errorMessage = `The following errors have occured during analysis \r\n\r\n ${errorList}`;
+                errorMessage = `The following errors have occured during analysis \r\n\r\n ${errorList}`;
                 core.setFailed(errorMessage);
                 //return;
             }
@@ -47,7 +48,7 @@ async function analyseTiCSBranch() {
             console.log(stdout);            
             
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            createPrComment(explorerUrl[1], changeSet);
+            createPrComment(explorerUrl[1], changeSet, errorMessage);
         });
 
     }  catch (error) {
@@ -105,7 +106,7 @@ async function getQualityGates(username) {
     }
 }
 
-async function createPrComment(explorerUrl, changeSet) {
+async function createPrComment(explorerUrl, changeSet, errorMessage) {
     try {
         let commentBody = {};
         
@@ -122,6 +123,12 @@ async function createPrComment(explorerUrl, changeSet) {
                     body : data 
                 };
                 commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
+                
+                /* Override in case of issues */
+                if (errorMessage) {
+                    commentBody.body = errorMessage
+                }
+                
                 createIssueComment(commentBody)
             })
         });
@@ -141,7 +148,7 @@ function doHttpRequest(url) {
           followAllRedirects: true
         }
                        
-        console.log(options)
+        //console.log(options)
         let req = https.get(url, options, (res) => {
 
           let body = [];
@@ -150,7 +157,7 @@ function doHttpRequest(url) {
           })
 
           res.on('end', () => {
-            console.log("status code: ", res.statusCode);
+              //console.log("status code: ", res.statusCode);
               if (res.statusCode === 200) {
                 //console.log(JSON.parse(body));
                 resolve(JSON.parse(body));
