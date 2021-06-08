@@ -112,7 +112,7 @@ async function createPrComment(explorerUrl, changeSet) {
                 commentBody = {
                     body : data 
                 };
-                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\nThe following file(s) have been checked:\r\n> ${changeSet}`;
+                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
                 createIssueComment(commentBody)
             })
         });
