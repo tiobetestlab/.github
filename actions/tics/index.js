@@ -38,7 +38,7 @@ async function analyseTiCSBranch() {
                 console.log(stderr)
                 core.setFailed(error);
                 
-                let errorList = stdout.match(/[ERROR.*/g);
+                let errorList = stdout.match(/\[ERROR.*/g);
                 let errorMessage = `The following errors have occured during analysis \r\n\r\n ${errorList}`;
                 core.setFailed(errorMessage);
                 //return;
