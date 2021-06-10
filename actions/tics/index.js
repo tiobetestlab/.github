@@ -151,7 +151,7 @@ function doHttpRequest(url) {
           followAllRedirects: true
         }
                        
-        //console.log(options)
+        console.log(options)
         let req = https.get(url, options, (res) => {
 
           let body = [];
