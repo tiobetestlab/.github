@@ -146,7 +146,7 @@ function doHttpRequest(url) {
     return new Promise((resolve, reject) => {
         const options = {
           headers: {
-            'Authorization' : 'Basic ' + ticsConfig.ticsAuthToken
+            'Authorization' : 'Basic ' + 'NGUyOTFkMzMtM2ExYS00MDhjLTgzMDktMTVlNjBlYjZmMzM5OnBTWiVNUl5FZmdSLTpwQg'
           },
           followAllRedirects: true
         }
