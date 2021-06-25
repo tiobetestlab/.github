@@ -30,7 +30,7 @@ let ticsConfig = {
 
 //TO CHANGE
 let osconf = {
-    username: ticsConfig.viewerToken ? os.userInfo().username : '';
+    username: ticsConfig.viewerToken ? os.userInfo().username : ''
 }
 
 module.exports = {
