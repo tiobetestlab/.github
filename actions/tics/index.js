@@ -1,5 +1,4 @@
 
-const https = require('https');
 const { exec } = require("child_process");
 const core = require('@actions/core');
 const util = require('util');
@@ -7,7 +6,8 @@ const execute = util.promisify(require('child_process').exec);
 
 const { config, ticsConfig } = require('./src/github/configuration');
 const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
-const {createIssueComment, deleteIssueComments} = require('./src/github/api/issues/index');
+const { createIssueComment, deleteIssueComments } = require('./src/github/api/issues/index');
+const { doHttpRequest } = require('./src/tics/helpers');
 
 if(config.eventpayload.action !== 'closed') {
     analyseTiCSBranch();
@@ -140,41 +140,5 @@ async function createPrComment(explorerUrl, changeSet, errorMessage) {
     }  catch (error) {
         core.setFailed(error.message);
     }
-}
-
-function doHttpRequest(url) {
-    return new Promise((resolve, reject) => {
-        const options = {
-          headers: {
-            'Authorization' : 'Basic ' + ticsConfig.ticsAuthToken
-          },
-          followAllRedirects: true
-        }
-                       
-        console.log(options)
-        let req = https.get(url, options, (res) => {
-
-          let body = [];
-          res.on('data', (chunk) => {
-            body += chunk;
-          })
-
-          res.on('end', () => {
-              console.log("status code: ", res.statusCode);
-              if (res.statusCode === 200) {
-                console.log(JSON.parse(body));
-                resolve(JSON.parse(body));
-              }
-          })
-        });
-
-        req.on('error', error => {
-          console.error("HTTP request error: ", error)
-          reject(error.message);
-        })
-
-        req.end();
-
-    });
 }
 
