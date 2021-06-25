@@ -4,7 +4,7 @@ const core = require('@actions/core');
 const util = require('util');
 const execute = util.promisify(require('child_process').exec);
 
-const { config, ticsConfig } = require('./src/github/configuration');
+const { config, ticsConfig, osconf } = require('./src/github/configuration');
 const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
 const { createIssueComment, deleteIssueComments } = require('./src/github/api/issues/index');
 const { doHttpRequest } = require('./src/tics/helpers');
@@ -12,7 +12,6 @@ const { doHttpRequest } = require('./src/tics/helpers');
 if(config.eventpayload.action !== 'closed') {
     analyseTiCSBranch();
 }
-
 
 async function analyseTiCSBranch() {
     try {
@@ -59,22 +58,11 @@ async function analyseTiCSBranch() {
     }
 }
 
-
-async function getUserName() {
+async function getQualityGates() {
     try {
-        const {stdout, stderr} = await execute('echo %username%')
-        return stdout;
-
-    }  catch (error) {
-       core.setFailed(error.message);
-    }
-}
-
-
-async function getQualityGates(username) {
-    try {
-        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
-        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
+        //TODO: CHANGE THE URL CONSTRUCTION
+        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${osconf.username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
+        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${osconf.username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
@@ -112,29 +100,20 @@ async function getQualityGates(username) {
 async function createPrComment(explorerUrl, changeSet, errorMessage) {
     try {
         let commentBody = {};
-        
-        getUserName().then((result) => {
-            result = {
-                username: result.trim()
-            }
-            console.log("Retrieving username...", result);
 
-            return result;
-        }).then((result) => {
-            getQualityGates(result.username).then((data) => {
-                commentBody = {
-                    body : data 
-                };
-                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
-                
-                /* Override in case of issues */
-                if (errorMessage) {
-                    commentBody.body = errorMessage
-                }
-                
-                createIssueComment(commentBody)
-            })
-        });
+        getQualityGates().then((data) => {
+            commentBody = {
+                body : data 
+            };
+            commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
+            
+            /* Override in case of issues */
+            if (errorMessage) {
+                commentBody.body = errorMessage
+            }
+            
+            createIssueComment(commentBody)
+        })
         
 
     }  catch (error) {

@@ -1,3 +1,4 @@
+const os = require('os');
 const core = require('@actions/core');
 let processEnv = process.env;
 
@@ -27,7 +28,13 @@ let ticsConfig = {
 
 }
 
+//TO CHANGE
+let osconf = {
+    username: ticsConfig.viewerToken ? os.userInfo().username : '';
+}
+
 module.exports = {
     config: config,
-    ticsConfig: ticsConfig
+    ticsConfig: ticsConfig,
+    osconf: osconf
 };

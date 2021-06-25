@@ -25,6 +25,7 @@
     "@actions/github": "^1.1.0",
     "@octokit/action": "^3.5.5",
     "@octokit/rest": "^18.3.5",
-    "util": "^0.12.4" 
+    "util": "^0.12.4",
+    "os": "^0.1.1"
   }
 }
