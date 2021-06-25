@@ -14,7 +14,7 @@ const getParams = (inputparams) => {
         repo: config.reponame,
         issue_number: config.eventpayload.pull_request.number,
         comment_id: inputparams.comment_id ?  inputparams.comment_id : '',
-        body: 'Hello world!'
+        body: inputparams.body ? inputparams.body : ''
     }
     
     return parameters;
