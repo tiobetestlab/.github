@@ -1,10 +1,10 @@
-const http = require('http');
+//const http = require('http');
 const https = require('https');
 const { ticsConfig } = require('../github/configuration');
 
 const doHttpRequest = (url) => {
   return new Promise((resolve, reject) => {
-    const client = (url.protocol === 'https') ? https : http;
+    //const client = (url.protocol === 'https') ? https : http;
 
     const optionsInit = {
       followAllRedirects: true
@@ -12,7 +12,7 @@ const doHttpRequest = (url) => {
 
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic' + ticsConfig.ticsAuthToken } } : optionsInit
 
-    let req = client.get(url, options, (res) => {
+    let req = https.get(url, options, (res) => {
 
       let body = [];
       res.on('data', (chunk) => {
