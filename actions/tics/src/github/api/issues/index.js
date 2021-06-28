@@ -23,7 +23,12 @@ const getParams = (inputparams) => {
 const createIssueComment =  async(params) => {
     console.log("Create Issue ", params)
     console.log("Create Issue, checking params ", getParams(params))
-    await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', getParams(params))
+
+    try{
+        await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', getParams(params))
+    } catch(e) {
+        console.log("Create Issue Comment failed: ", e)
+    }
 };
 
 const deleteIssueComment =  async(params) => {
