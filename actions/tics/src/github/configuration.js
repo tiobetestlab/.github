@@ -47,5 +47,5 @@ module.exports = {
     config: config,
     ticsConfig: ticsConfig,
     osconf: osconf,
-    execString: execString
+    execCommands: execCommands
 };
