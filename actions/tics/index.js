@@ -4,7 +4,7 @@ const core = require('@actions/core');
 const util = require('util');
 const execute = util.promisify(require('child_process').exec);
 
-const { config, ticsConfig, osconf } = require('./src/github/configuration');
+const { config, ticsConfig, execCommands, osconf } = require('./src/github/configuration');
 const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
 const { createIssueComment, deleteIssueComments } = require('./src/github/api/issues/index');
 const { doHttpRequest } = require('./src/tics/helpers');
@@ -17,13 +17,7 @@ async function analyseTiCSBranch() {
     try {
         console.log(`Analysing new pull request for project ${ticsConfig.projectName}.`)
         
-        var execString = 'TICS -qg -calc ALL -changed ';
-        execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
-        execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
-        execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';
-        execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
-        
-        console.log(`Invoking: ${execString}`);
+        console.log(`Invoking: ${execCommands.ticsClientViewer}`);
         
         let errorMessage = '';
         let changeSet = '';
@@ -33,7 +27,7 @@ async function analyseTiCSBranch() {
             console.log(changeSet);
         });
                 
-        exec(execString, (error, stdout, stderr) => {
+        exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
             if (error || stderr) {
                 console.log(error)
                 console.log(stderr)
@@ -44,7 +38,6 @@ async function analyseTiCSBranch() {
                 errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`);
                 
                 core.setFailed(errorMessage);
-                //return;
             }
 
             console.log(stdout);            

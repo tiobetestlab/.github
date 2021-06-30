@@ -28,6 +28,16 @@ let ticsConfig = {
 
 }
 
+let execString = 'TICS -qg -calc ALL -changed ';
+    execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
+    execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
+    execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';
+    execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
+
+let execCommands = {
+    ticsClientViewer: execString
+}
+
 //TO CHANGE
 let osconf = {
     username: ticsConfig.viewerToken ? os.userInfo().username : ''
