@@ -21,12 +21,24 @@ const getParams = () => {
 
 const getPRChangedFiles =  async() => {
 
-    let changedFiles = {};
+    let changedFiles = "";
+
+    try {
+       await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/files', getParams()).then((response) => {
+            console.log("Getting the changed files list ", response.data)
+
+            response.data && response.data.map((item, i) => {
+                changedFiles += item.filename + " ,"
+            })
+
+            changedFiles = changedFiles.slice(0, -1); // remove the last comma
+
+            return changedFiles; 
+        })
+    } catch(e) {
+        console.log("We cannot retrieve the files that changed in this PR: ", e)
+    }
     
-    await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/files', getParams()).then((response) => {
-        console.log("Getting the changed files list ", response.data)
-        changedFiles = response.data;   
-    })
 
     return changedFiles;
 };

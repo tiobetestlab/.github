@@ -21,12 +21,6 @@ async function analyseTiCSBranch() {
         console.log(`Invoking: ${execCommands.ticsClientViewer}`);
         
         let errorMessage = '';
-        let changeSet = '';
-        
-        exec('git diff --name-only origin/master..HEAD', (error, stdout, stderr) => {
-            changeSet = stdout;
-            console.log(changeSet);
-        });
                 
         exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
             if (error || stderr) {
@@ -44,7 +38,7 @@ async function analyseTiCSBranch() {
             console.log(stdout);            
             
             let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            createPrComment(explorerUrl[1], changeSet, errorMessage);
+            createPrComment(explorerUrl[1], errorMessage);
         });
 
     }  catch (error) {
@@ -91,24 +85,20 @@ async function getQualityGates() {
     }
 }
 
-async function createPrComment(explorerUrl, changeSet, errorMessage) {
+async function createPrComment(explorerUrl, errorMessage) {
     try {
         let commentBody = {};
 
+        getPRChangedFiles().then((changeSet) => {
+            console.log("Retrieving changeSet...", changeSet);
 
-        getPRChangedFiles().then((result) => {
-            result = {
-                changeSet: result.trim()
-            }
-            console.log("Retrieving changeSet...", result);
-
-            return result;
-        }).then((result) => {
+            return changeSet;
+        }).then((changeSet) => {
             getQualityGates().then((data) => {
                 commentBody = {
                     body : data 
                 };
-                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${result.changeSet}`;
+                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
                 
                 /* Override in case of issues */
                 if (errorMessage) {
