@@ -46,5 +46,6 @@ let osconf = {
 module.exports = {
     config: config,
     ticsConfig: ticsConfig,
-    osconf: osconf
+    osconf: osconf,
+    execString: execString
 };

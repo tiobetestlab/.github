@@ -7,6 +7,7 @@ const execute = util.promisify(require('child_process').exec);
 const { config, ticsConfig, execCommands, osconf } = require('./src/github/configuration');
 const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
 const { createIssueComment, deleteIssueComments } = require('./src/github/api/issues/index');
+const { getPRChangedFiles } = require('./src/github/api/pulls/index');
 const { doHttpRequest } = require('./src/tics/helpers');
 
 if(config.eventpayload.action !== 'closed') {
@@ -94,19 +95,29 @@ async function createPrComment(explorerUrl, changeSet, errorMessage) {
     try {
         let commentBody = {};
 
-        getQualityGates().then((data) => {
-            commentBody = {
-                body : data 
-            };
-            commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
-            
-            /* Override in case of issues */
-            if (errorMessage) {
-                commentBody.body = errorMessage
+
+        getPRChangedFiles().then((result) => {
+            result = {
+                changeSet: result.trim()
             }
-            
-            createIssueComment(commentBody)
-        })
+            console.log("Retrieving changeSet...", result);
+
+            return result;
+        }).then((result) => {
+            getQualityGates().then((data) => {
+                commentBody = {
+                    body : data 
+                };
+                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${result.changeSet}`;
+                
+                /* Override in case of issues */
+                if (errorMessage) {
+                    commentBody.body = errorMessage
+                }
+                
+                createIssueComment(commentBody)
+            })
+        });
         
 
     }  catch (error) {
