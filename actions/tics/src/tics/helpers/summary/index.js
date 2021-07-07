@@ -11,7 +11,7 @@ const getQualityGateSummary = (qualityGateObj) => {
     let gate_status = qualityGateObj && qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :x: Failed'
     let gates_conditions = '';
 
-    qqualityGateObj && ualityGateObj.gates && qualityGateObj.gates.map((gate) => {
+    qualityGateObj && qualityGateObj.gates && qualityGateObj.gates.map((gate) => {
         gate.conditions.map((condition) => {
             if(condition.skipped !== true) {
                 let condition_status = condition.passed === true ? '> :heavy_check_mark: ' : '> :x: ';
