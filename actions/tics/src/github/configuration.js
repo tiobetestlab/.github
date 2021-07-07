@@ -15,7 +15,7 @@ let config = {
 let ticsConfig = {
     projectName: core.getInput('projectName', {required: true}),
     branchName: core.getInput('branchName', {required: true}),   
-    branchDir: core.getInput('branchDir', {required: true}),
+    branchDir: core.getInput('branchDir', {required: false}),
     tmpDir: core.getInput('tmpDir'),
     calc: core.getInput('calc'),
     ticsViewerUrl: core.getInput('ticsViewerUrl', {required: true}),

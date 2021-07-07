@@ -10,7 +10,7 @@ inputs:
     required: false
   branchDir:  # id of input
     description: 'Location of the files to analyze'
-    required: true
+    required: false
   ticsViewerUrl:  # id of input
     description: 'URL to the TICS Viewer'
     required: true
