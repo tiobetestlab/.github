@@ -1,5 +1,6 @@
 const { Octokit } = require("@octokit/action"); //GitHub API client for GitHub Actions
 let { config } = require('../../configuration');
+const core = require('@actions/core');
 
 //Octokit client is authenticated
 const octokit = new Octokit();
