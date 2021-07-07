@@ -1,44 +1,64 @@
-
+const util = require('util');
 const { exec } = require("child_process");
 const core = require('@actions/core');
-const util = require('util');
 const execute = util.promisify(require('child_process').exec);
 
-const { config, ticsConfig, execCommands, osconf } = require('./src/github/configuration');
-const { addCheckRun, editCheckRun } = require('./src/github/api/checkruns/index');
-const { createIssueComment, deleteIssueComments } = require('./src/github/api/issues/index');
+const { config, ticsConfig, execCommands } = require('./src/github/configuration');
+const { createIssueComment } = require('./src/github/api/issues/index');
 const { getPRChangedFiles } = require('./src/github/api/pulls/index');
-const { doHttpRequest } = require('./src/tics/helpers');
+const { getQualityGates } = require('./src/tics/api/qualitygates/index');
+const { getErrorSummary, getQualityGateSummary, getLinkSummary, getFilesSummary } = require('./src/tics/helpers/summary/index');
 
 if(config.eventpayload.action !== 'closed') {
-    analyseTiCSBranch();
+    runTICSClient();
 }
 
-async function analyseTiCSBranch() {
+async function runTICSClient() {
     try {
-        console.log(`Analysing new pull request for project ${ticsConfig.projectName}.`)
-        
-        console.log(`Invoking: ${execCommands.ticsClientViewer}`);
-        
-        let errorMessage = '';
-                
+        core.info(`\u001b[35m > Analysing new pull request for project ${ticsConfig.projectName}.`)
+        core.info(`Invoking: ${execCommands.ticsClientViewer  }`);
+
         exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
             if (error || stderr) {
-                console.log(error)
-                console.log(stderr)
-                core.setFailed(error);
-                
-                let errorList = stdout.match(/\[ERROR.*/g);
-                errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
-                errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`);
-                
-                core.setFailed(errorMessage);
-            }
+                core.debug(error);
+                core.debug(stderr);
+                core.info(stdout);
 
-            console.log(stdout);            
-            
-            let explorerUrl = stdout.match(/http.*Explorer.*/g);
-            createPrComment(explorerUrl[1], errorMessage);
+                let errorList = stdout.match(/\[ERROR.*/g);
+
+                postSummary(errorList, true);
+
+                core.setFailed("There is a problem while running TICS Client Viewer ");
+
+                return;
+            } else {
+                core.info(stdout);
+
+                let explorerUrl = stdout.match(/http.*Explorer.*/g).slice(-1).pop();
+                
+                getPRChangedFiles().then((changeSet) => {
+                    core.info(`\u001b[35m > Retrieving changed files to analyse`);
+                    core.info(`Changed files list retrieved: ${changeSet}`);
+
+                    return changeSet;
+
+                }).then((changeSet) => {
+                    getQualityGates(explorerUrl).then((qualitygates) => {
+                        core.info(`\u001b[35m > Retrieving quality gates results`);
+                        core.info(`Quality gate results retrieved: ${qualitygates}`);
+
+                        return qualitygates;
+                    }).then((qualitygates) => {
+                        let results = {
+                            explorerUrl: explorerUrl,
+                            changeSet: changeSet,
+                            qualitygates: qualitygates
+                        };
+
+                        postSummary(results, false);
+                    })
+                });
+            }
         });
 
     }  catch (error) {
@@ -46,72 +66,14 @@ async function analyseTiCSBranch() {
     }
 }
 
-async function getQualityGates() {
-    try {
-        //TODO: CHANGE THE URL CONSTRUCTION
-        console.log(`Getting Quality Gates from ${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${osconf.username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`)
-        let qualityGates = await doHttpRequest(`${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?axes=ClientData(${osconf.username}:${ticsConfig.viewerToken}),Project(${ticsConfig.projectName}),Branch(${ticsConfig.branchName})`).then((data) => {
-            let response = {
-                statusCode: 200,
-                body: JSON.stringify(data),
-            };
-            console.log("Quality Gate response ", response);
-            return response;
-        });
+async function postSummary(summary, isError) {
+    let commentBody = {};
 
-        let qualityGateObj = JSON.parse(qualityGates.body)
-        let gate_status = qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :x: Failed'
-        let gates_conditions = '';
-
-        qualityGateObj.gates && qualityGateObj.gates.map((gate) => {
-            gate.conditions.map((condition) => {
-                if(condition.skipped !== true) {
-                    let condition_status = condition.passed === true ? '> :heavy_check_mark: ' : '> :x: ';
-                    gates_conditions = gates_conditions + condition_status + " " + condition.descriptionText + '\r\n';  
-                }
-            })
-        })
-
-        let summary = `## TICS Quality Gate \r\n\r\n ${gate_status} \r\n\r\n ${gates_conditions}\n`
-        
-        if(qualityGateObj.passed === false) {
-            core.setFailed('summary');
-        }
-        
-        return summary;
-
-    } catch (error) {
-        core.setFailed(error);
+    if(isError) {
+        commentBody.body = getErrorSummary(summary);
+        createIssueComment(commentBody)
+    } else {
+        commentBody.body = getQualityGateSummary(summary.qualitygates) + getLinkSummary(summary.explorerUrl) + getFilesSummary(summary.changeSet);
+        createIssueComment(commentBody)
     }
 }
-
-async function createPrComment(explorerUrl, errorMessage) {
-    try {
-        let commentBody = {};
-
-        getPRChangedFiles().then((changeSet) => {
-            console.log("Retrieving changeSet...", changeSet);
-
-            return changeSet;
-        }).then((changeSet) => {
-            getQualityGates().then((data) => {
-                commentBody = {
-                    body : data 
-                };
-                commentBody.body += `[See the results in the TICS Viewer](${explorerUrl})\r\n\r\n#### The following file(s) have been checked:\r\n> ${changeSet}`;
-                
-                /* Override in case of issues */
-                if (errorMessage) {
-                    commentBody.body = errorMessage
-                }
-                
-                createIssueComment(commentBody)
-            })
-        });
-        
-
-    }  catch (error) {
-        core.setFailed(error.message);
-    }
-}
-

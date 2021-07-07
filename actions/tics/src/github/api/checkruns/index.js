@@ -36,7 +36,7 @@ const addCheckRun =  async(params) => {
     let checkrunRes = {};
 
     //console.log("addCheckRun ", getParams(params))
-    await octokit.request('POST /repos/danai-andriopoulou/TiCS-Github-Action/check-runs', {
+    await octokit.request('POST /repos/{owner}/{repo}/check-runs', {
         owner: config.owner,
         repo: config.reponame,
         head_sha: config.eventpayload.pull_request.head.sha,
@@ -61,7 +61,6 @@ const editCheckRun =  async(params) => {
 
     console.log("Edit check run ", getParams(params))
     await octokit.request('PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}', getParams(params)).then((response) => {
-        //console.log("Edit RUn Response ", response)
         checkeditRes = response;   
     })
 

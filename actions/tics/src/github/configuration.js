@@ -13,22 +13,22 @@ let config = {
 }
 
 let ticsConfig = {
-    //buildServerPath: core.getInput('buildServerPath'), 
-    //ticsDir: core.getInput('ticsDir'), 
-    projectName: core.getInput('projectName') ? core.getInput('projectName'): config.reponame,     
-    branchName: core.getInput('branchName') ? core.getInput('branchName') : config.branchname,     
-    branchDir: core.getInput('branchDir') ? core.getInput('branchDir'): config.branchdir,      
-    //calc: core.getInput('calc'),         
-    //recalc: core.getInput('recalc'),
-    ticsViewerUrl: core.getInput('ticsViewerUrl'),         
-    checkQualityGate: core.getInput('checkQualityGate'),                           
-    failIfQualityGateFails: core.getInput('failIfQualityGateFails'),
+    projectName: core.getInput('projectName', {required: true}),
+    branchName: core.getInput('branchName', {required: true}),   
+    branchDir: core.getInput('branchDir', {required: true}),
+    tmpDir: core.getInput('tmpDir'),
+    calc: core.getInput('calc'),
+    ticsViewerUrl: core.getInput('ticsViewerUrl', {required: true}),
     viewerToken: core.getInput('clientToken'),
     ticsAuthToken: core.getInput('ticsAuthToken')
-
 }
 
-let execString = 'TICS -qg -calc ALL -changed ';
+let osconf = {
+    username: ticsConfig.viewerToken ? os.userInfo().username : ''
+}
+
+let execString = 'TICS -qg ';
+    execString += ticsConfig.calc ? `-calc ${ticsConfig.calc} -changed `: 'ALL -changed ';
     execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
     execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
     execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';
@@ -36,11 +36,6 @@ let execString = 'TICS -qg -calc ALL -changed ';
 
 let execCommands = {
     ticsClientViewer: execString
-}
-
-//TO CHANGE
-let osconf = {
-    username: ticsConfig.viewerToken ? os.userInfo().username : ''
 }
 
 module.exports = {

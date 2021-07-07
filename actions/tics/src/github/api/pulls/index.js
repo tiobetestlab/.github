@@ -1,10 +1,11 @@
 const { Octokit } = require("@octokit/action"); //GitHub API client for GitHub Actions
 let { config } = require('../../configuration');
+const core = require('@actions/core');
 
 //Octokit client is authenticated
 const octokit = new Octokit();
 
-/* Helper functions to get all changed files in a pull request */
+/* Helper functions to get all changed files params of a pull request */
 const getParams = () => {
 
     let parameters = {
@@ -25,7 +26,7 @@ const getPRChangedFiles =  async() => {
 
     try {
        await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/files', getParams()).then((response) => {
-            console.log("Getting the changed files list ", response.data)
+            core.debug(`Getting the changed files list ${response.data}`)
 
             response.data && response.data.map((item, i) => {
                 changedFiles += item.filename + " ,"
@@ -36,9 +37,8 @@ const getPRChangedFiles =  async() => {
             return changedFiles; 
         })
     } catch(e) {
-        console.log("We cannot retrieve the files that changed in this PR: ", e)
+        core.error(`We cannot retrieve the files that changed in this PR: ${e}`)
     }
-    
 
     return changedFiles;
 };
