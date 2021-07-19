@@ -22,6 +22,7 @@ async function runTICSClient() {
             if (error || stderr) {
                 core.debug(error);
                 core.debug(stderr);
+                core.info(stderr)
                 core.info(stdout);
 
                 let errorList = stdout.match(/\[ERROR.*/g);
