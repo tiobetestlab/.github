@@ -29,7 +29,7 @@ async function runTICSClient() {
 
                 postSummary(errorList, true);
 
-                core.setFailed("There is a problem while running TICS Client Viewer ");
+                core.setFailed("There is a problem while running TICS Client Viewer. Please check that TICS is configured and all required parameters have been set in your workflow.");
 
                 return;
             } else {
