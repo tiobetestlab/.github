@@ -11,7 +11,7 @@ const doHttpRequest = (url) => {
       followAllRedirects: true
     }
 
-    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic' + ticsConfig.ticsAuthToken } } : optionsInit
+    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
 
     let req = client.get(url, options, (res) => {
 
