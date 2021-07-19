@@ -27,10 +27,8 @@ let osconf = {
     username: ticsConfig.viewerToken ? os.userInfo().username : ''
 }
 
-console.log("Retrieving calc ", ticsConfig.calc)
-
 let execString = 'TICS -qg ';
-    execString += ticsConfig.calc ? `-calc ${ticsConfig.calc} -changed `: 'ALL -changed ';
+    execString += ticsConfig.calc ? `-calc ${ticsConfig.calc} -changed `: '-calc ALL -changed ';
     execString += ticsConfig.projectName ? `-project ${ticsConfig.projectName} ` : '';
     execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
     execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';

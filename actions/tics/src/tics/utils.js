@@ -24,7 +24,7 @@ const doHttpRequest = (url) => {
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
           } else {
-            core.setFailed("HTTP request failed with status ", res.statusCode)
+            core.setFailed("HTTP request failed with status ", res.statusCode, ". Please try again by setting a ticsAuthToken in your configuration.")
           }
       })
     });
