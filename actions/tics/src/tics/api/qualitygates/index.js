@@ -1,5 +1,5 @@
  const core = require('@actions/core');
- const { doHttpRequest, getSubstring } = require('../../helpers');
+ const { doHttpRequest, getSubstring } = require('../../helpers-b');
  const { ticsConfig } = require('../../../github/configuration');
  const { execCommands } = require('../../../github/configuration');
 
