@@ -13,6 +13,8 @@ const doHttpRequest = (url) => {
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic' + ticsConfig.ticsAuthToken } } : optionsInit
 
     let req = https.get(url, options, (res) => {
+      console.log("Checking url ", url)
+      console.log("Checking options ", options)
 
       let body = [];
       res.on('data', (chunk) => {
@@ -20,6 +22,7 @@ const doHttpRequest = (url) => {
       })
 
       res.on('end', () => {
+        console.log("Checking status code ", res.statusCode)
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
           }
