@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const http = require('http');
 const https = require('https');
 const { ticsConfig } = require('../github/configuration');
@@ -10,11 +11,9 @@ const doHttpRequest = (url) => {
       followAllRedirects: true
     }
 
-    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
+    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic' + ticsConfig.ticsAuthToken } } : optionsInit
 
-    let req = https.get(url, options, (res) => {
-      console.log("Checking url ", url)
-      console.log("Checking options ", options)
+    let req = client.get(url, options, (res) => {
 
       let body = [];
       res.on('data', (chunk) => {
@@ -22,15 +21,16 @@ const doHttpRequest = (url) => {
       })
 
       res.on('end', () => {
-        console.log("Checking status code ", res.statusCode)
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
+          } else {
+            core.setFailed("HTTP request failed with status ", res.statusCode)
           }
       })
     });
 
     req.on('error', error => {
-      console.error("HTTP request error: ", error)
+      core.setFailed("HTTP request error: ", error)
       reject(error.message);
     })
 

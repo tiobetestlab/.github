@@ -13,13 +13,12 @@
  const getQualityGates = async(link) => {
     try {
      
-        console.log("Retrieving quality gates for ", getAPIEndpoint(link))
+        console.log("Retrieving quality gates from ", getAPIEndpoint(link))
         let qualityGates = await doHttpRequest(getAPIEndpoint(link)).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
             };
-            console.log("Quality Gate response ", response);
             return response;
         });
 
@@ -32,7 +31,7 @@
         return qualityGateObj;
 
     } catch (error) {
-        core.setFailed(error);
+        core.setFailed("An error occured when trying to retrieve quality gates ", error);
     }
 }
 

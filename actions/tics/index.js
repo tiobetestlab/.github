@@ -36,12 +36,11 @@ async function runTICSClient() {
                 core.info(stdout);
 
                 let explorerUrl = stdout.match(/http.*Explorer.*/g).slice(-1).pop();
-                console.log("Explorer url retrieved ", explorerUrl);
+                core.info(`Explorer url retrieved ${explorerUrl}`);
                 
                 getPRChangedFiles().then((changeSet) => {
                     core.info(`\u001b[35m > Retrieving changed files to analyse`);
                     core.info(`Changed files list retrieved: ${changeSet}`);
-                    console.log("changeSet ", changeSet)
                     return changeSet;
 
                 }).then((changeSet) => {
