@@ -17,7 +17,6 @@ inputs:
   calc: # id of input
     description: 'Comma-separated list of metrics to be used'
     required: false
-    default: 'ALL'
   ticsAuthToken:  # id of input
     description: 'Authentication token to connect to the TICS Viewer'
     required: false
