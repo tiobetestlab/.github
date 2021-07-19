@@ -7,6 +7,7 @@ It contains one action step to use within your workflow.
 ## Requirements
 
 * Have TiCS installed in your system. 
+* An action runner should have been installed on the repo you are wishing to run the action.
 
 ## Run TICS
 
@@ -16,29 +17,42 @@ The workflow, usually declared in `.github/workflows/build.yml`, looks like:
 
 ```yaml
 
-name: Build
+name: CI
 
+# Controls when the action will run. 
 on:
-  pull_request: 
-        types: [ opened, edited, synchronize, reopened ]
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ master ]
+  pull_request:
+    types: [ opened, edited, synchronize, reopened ]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  TiCSDemo-CI:
-    name: TiCS
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
     runs-on: self-hosted
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
-      - name: Publish TICS
-        uses: ./
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+          
+      - name: TICS Action Run
+        uses: ./.github/actions/tics
         env: 
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
-          projectName: 'TiCS-Action'                                        # mandatory, default value is the project name that this action is running on
-          branchName: 'andriopoulou-danai-patch-1'                          # mandatory, default value is the branch name that this action is running on
-          branchDir: '/home/danai/Tics-Plugins/TICS-Action-1/TICS-Action'     # mandatory
-          ticsViewerUrl: 'http://localhost:20212/tiobeweb/2021.2/'          # mandatory
-          clientToken: 'githubToken'                                        # mandatory, the user token for the TiCS Viewer
+          projectName: 'BazelCpp'
+          branchName: 'master'
+          ticsViewerUrl: 'https://testlab.tiobe.com/tiobeweb/testlab/'
+          ticsAuthToken: 'NGUyOTFkMzMtM2ExYS00MDhjLTgzMDktMTVlNjBlYjZmMzM5OnBTWiVNUl5FZmdSLTpwQg'
+          clientToken: 'bazel'
+          tmpDir: 'C:/temp/bazel'
+
 ```
 
 ### Secrets
