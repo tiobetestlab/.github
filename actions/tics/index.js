@@ -36,7 +36,7 @@ async function runTICSClient() {
                 core.info(stdout);
 
                 let explorerUrl = stdout.match(/http.*Explorer.*/g).slice(-1).pop();
-                core.info(`Explorer url retrieved ${explorerUrl}`);
+                core.info(`\u001b[35m > Explorer url retrieved ${explorerUrl}`);
                 
                 getPRChangedFiles().then((changeSet) => {
                     core.info(`\u001b[35m > Retrieving changed files to analyse`);
@@ -45,8 +45,7 @@ async function runTICSClient() {
 
                 }).then((changeSet) => {
                     getQualityGates(explorerUrl).then((qualitygates) => {
-                        core.info(`\u001b[35m > Retrieving quality gates results`);
-                        core.info(`Quality gate results retrieved: ${qualitygates}`);
+                        core.info(`\u001b[35m > Retrieved quality gates results`);
 
                         return qualitygates;
                     }).then((qualitygates) => {

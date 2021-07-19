@@ -13,7 +13,7 @@
  const getQualityGates = async(link) => {
     try {
      
-        console.log("Retrieving quality gates from ", getAPIEndpoint(link))
+        console.log("\u001b[35m > Trying to retrieve quality gates from ", getAPIEndpoint(link))
         let qualityGates = await doHttpRequest(getAPIEndpoint(link)).then((data) => {
             let response = {
                 statusCode: 200,
