@@ -33,8 +33,7 @@ let execString = 'TICS -qg ';
     execString += ticsConfig.viewerToken ? `-cdtoken ${ticsConfig.viewerToken} ` : '';
     execString += ticsConfig.tmpDir ? `-tmpdir ${ticsConfig.tmpDir} ` : '';
     execString += ticsConfig.branchDir ? `${ticsConfig.branchDir} ` : ' .';
-    execString += '-changed';
-
+    
 let execCommands = {
     ticsClientViewer: execString
 }
