@@ -10,7 +10,7 @@ const doHttpRequest = (url) => {
       followAllRedirects: true
     }
 
-    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic' + ticsConfig.ticsAuthToken } } : optionsInit
+    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
 
     let req = https.get(url, options, (res) => {
       console.log("Checking url ", url)
