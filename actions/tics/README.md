@@ -39,8 +39,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-          
+
       - name: TICS Action Run
         uses: ./.github/actions/tics
         env: 
