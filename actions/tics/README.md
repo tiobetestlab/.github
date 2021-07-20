@@ -53,6 +53,8 @@ jobs:
           tmpDir: 'C:/temp/bazel'
 
 ```
+### Inputs
+Please see the whole list of inputs you can set up within your workflow in [action.yml](https://github.com/tiobetestlab/.github/blob/main/actions/tics/action.yml)
 
 ### Secrets
 - *`GITHUB_TOKEN` – Provided by Github (see [Authenticating with the GITHUB_TOKEN](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token)).*
