@@ -9,11 +9,8 @@ It contains one action step to use within your workflow.
 * Have TiCS installed in your system. 
 * An action runner should have been installed on the repo you are wishing to run the action.
 
-## Run TICS
-
-The workflow, usually declared in `.github/workflows/build.yml`, looks like:
-
 ## Publish TICS
+The workflow, usually declared in `.github/workflows/build.yml`, looks like:
 
 ```yaml
 
