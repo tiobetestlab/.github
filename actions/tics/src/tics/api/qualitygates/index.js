@@ -21,9 +21,10 @@
             };
             return response;
         });
-
+        console.log("\u001b[35m > Quality gates retrieved ", qualityGates)
         let qualityGateObj = JSON.parse(qualityGates.body);
-
+        
+        console.log("\u001b[35m > Quality gates parsed ", qualityGateObj)
         if(qualityGateObj.passed === false) {
             core.setFailed('Quality gate failed');
         }
