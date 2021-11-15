@@ -14,7 +14,7 @@ const doHttpRequest = (url) => {
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
     
     console.log("\u001b[35m > Request for quality gates retrieval with options ", url, " ", client, " ", options)
-    let req = client.get(url, options, (res) => {
+    let req = http.get(url, options, (res) => {
 
       let body = [];
       res.on('data', (chunk) => {
