@@ -13,18 +13,13 @@ const doHttpRequest = (url) => {
 
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
     
-    console.log("\u001b[35m > Request for quality gates retrieval with protocol ", client)
     let req = http.get(url, options, (res) => {
-      console.log("\u001b[35m > Request for quality gates retrieval with response ", res)
       let body = [];
       res.on('data', (chunk) => {
         body += chunk;
       })
-      
-      console.log("\u001b[35m > Request for quality gates retrieval with body ", body)
 
       res.on('end', () => {
-          console.log("\u001b[35m > Request for quality gates retrieval with status ", res.statusCode)
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
           } else {
