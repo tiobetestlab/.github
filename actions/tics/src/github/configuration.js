@@ -4,6 +4,7 @@ let processEnv = process.env;
 
 let config = {
     eventpayload: require(processEnv.GITHUB_EVENT_PATH),
+    eventname: processEnv.GITHUB_EVENT_NAME,
     repo: processEnv.GITHUB_REPOSITORY,
     owner: processEnv.GITHUB_REPOSITORY.split("/")[0],
     reponame: processEnv.GITHUB_REPOSITORY.split("/")[1],
