@@ -9,8 +9,10 @@ const { getPRChangedFiles } = require('./src/github/api/pulls/index');
 const { getQualityGates } = require('./src/tics/api/qualitygates/index');
 const { getErrorSummary, getQualityGateSummary, getLinkSummary, getFilesSummary } = require('./src/tics/helpers/summary/index');
 
-if(config.eventpayload.action !== 'closed') {
+if (config.eventname === 'pull_request' && config.eventpayload.action !== 'closed') {
     runTICSClient();
+} else {
+    core.setFailed("This action is running only on pull requests events.");
 }
 
 async function runTICSClient() {
