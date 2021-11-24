@@ -1,8 +1,12 @@
-
-
 const getErrorSummary = (errorList) => {
-    let errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
-    errorList && errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`);
+    let errorMessage;
+
+    if (errorList) {
+       errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
+       errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`); 
+    } else {
+        errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### Please check that TICS is configured and all required parameters have been set in your workflow.`;
+    }
 
     return errorMessage;
 }
