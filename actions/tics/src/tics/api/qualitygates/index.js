@@ -21,8 +21,11 @@
             };
             return response;
         });
+     
+        console.log("\u001b[35m > Trying to parse quality gates response.")
         let qualityGateObj = JSON.parse(qualityGates.body);
         
+        console.log("\u001b[35m > Trying to retrieve quality gate status ", qualityGateObj.passed)
         if(qualityGateObj.passed === false) {
             core.setFailed('Quality gate failed');
         }
