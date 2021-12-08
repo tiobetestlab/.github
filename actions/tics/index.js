@@ -21,9 +21,10 @@ async function runTICSClient() {
         core.info(`Invoking: ${execCommands.ticsClientViewer  }`);
 
         exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
-            if (error) {
-                core.debug(error);
-                core.debug(stderr);
+            console.log("Error : ", error);
+            console.log("Stderr : ", stderr);
+            console.log("Stdout : ", stdout);
+            if (error || stderr) {
                 core.info(stderr);
                 core.info(stdout);
 
