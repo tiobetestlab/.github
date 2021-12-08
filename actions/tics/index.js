@@ -28,10 +28,7 @@ async function runTICSClient() {
                 core.info(stdout);
 
                 let errorList = stdout.match(/\[ERROR.*/g);
-                
-                if (errorList) {
-                    postSummary(errorList, true);
-                }
+                postSummary(errorList, true);
 
                 core.setFailed("There is a problem while running TICS Client Viewer. Please check that TICS is configured and all required parameters have been set in your workflow.");
 
