@@ -28,6 +28,8 @@ async function runTICSClient() {
                 core.info(stdout);
 
                 let errorList = stdout.match(/\[ERROR.*/g);
+                
+                core.info("Error list ", errorList, " ", errorList.length)
 
                 postSummary(errorList, true);
 
