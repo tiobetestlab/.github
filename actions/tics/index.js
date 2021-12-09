@@ -21,15 +21,16 @@ async function runTICSClient() {
         core.info(`Invoking: ${execCommands.ticsClientViewer  }`);
 
         exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
-            console.log("Error : ", error);
-            console.log("Stderr : ", stderr);
-            console.log("Stdout : ", stdout);
-            if (error || stderr) {
+            if (error && error.code != 0) {
                 core.info(stderr);
                 core.info(stdout);
 
                 let errorList = stdout.match(/\[ERROR.*/g);
-                postSummary(errorList, true);
+                if (errorList) {
+                    postSummary(errorList, true);
+                } else {
+                    postSummary(stderr, true);
+                }
 
                 core.setFailed("There is a problem while running TICS Client Viewer. Please check that TICS is configured and all required parameters have been set in your workflow.");
 
