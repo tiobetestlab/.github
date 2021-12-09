@@ -11,7 +11,7 @@ const getErrorSummary = (errorList) => {
 }
 
 const getQualityGateSummary = (qualityGateObj) => {
-    console.log("Gate status", qualityGateObj.passed);
+    console.log("Gate status", qualityGateObj);
     let gate_status = qualityGateObj && qualityGateObj.passed === true ? '### :heavy_check_mark: Passed ' : '### :x: Failed'
     let gates_conditions = '';
 
