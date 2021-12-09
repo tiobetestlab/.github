@@ -4,7 +4,7 @@
  const { execCommands } = require('../../../github/configuration');
 
  const getAPIEndpoint = (link) => {
-    let qgBaseAPI = `${ticsConfig.ticsViewerUrl}/api/private/qualitygate/Status?`;
+    let qgBaseAPI = `${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?`; //FIX ME
     qgBaseAPI += getSubstring(link, "axes", "Window");
     
     return qgBaseAPI;
