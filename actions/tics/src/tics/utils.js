@@ -37,6 +37,33 @@ const doHttpRequest = (url) => {
   });
 }
 
+/* Work-around should be removed */
+const doHttpRequestNoAuth = (url) => {
+  return new Promise((resolve, reject) => {
+
+    let req = https.get(url, (res) => {
+
+      let body = [];
+      res.on('data', (chunk) => {
+        body += chunk;
+      })
+
+      res.on('end', () => {
+          if (res.statusCode === 200) {
+            resolve(JSON.parse(body));
+          }
+      })
+    });
+
+    req.on('error', error => {
+      console.error("HTTP request error: ", error)
+      reject(error.message);
+    })
+
+    req.end();
+  });
+}
+
 const getSubstring = (value, del1, del2) => {
 
   const sub_position_1 = value.indexOf(del1);
@@ -46,6 +73,7 @@ const getSubstring = (value, del1, del2) => {
 }
 
 module.exports = {
+    doHttpRequestNoAuth: doHttpRequestNoAuth,
     doHttpRequest: doHttpRequest,
     getSubstring: getSubstring
 }

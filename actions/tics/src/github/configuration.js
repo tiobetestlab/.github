@@ -1,5 +1,6 @@
 const os = require('os');
 const core = require('@actions/core');
+const { getSubstring } = require('../tics/utils');
 let processEnv = process.env;
 
 let config = {
@@ -10,7 +11,8 @@ let config = {
     reponame: processEnv.GITHUB_REPOSITORY.split("/")[1],
     branchname: processEnv.GITHUB_HEAD_REF,
     basebranchname: processEnv.GITHUB_BASE_REF,
-    branchdir: processEnv.GITHUB_WORKSPACE
+    branchdir: processEnv.GITHUB_WORKSPACE,
+    ticsEnv: processEnv.TICS
 }
 
 let ticsConfig = {
@@ -19,7 +21,7 @@ let ticsConfig = {
     branchDir: core.getInput('branchDir', {required: false}),
     tmpDir: core.getInput('tmpDir'),
     calc: core.getInput('calc'),
-    ticsViewerUrl: core.getInput('ticsViewerUrl', {required: true}),
+    ticsViewerUrl: core.getInput('ticsViewerUrl') ? core.getInput('ticsViewerUrl') : getSubstring(config.ticsEnv, "api", ""),
     viewerToken: core.getInput('clientToken'),
     ticsAuthToken: core.getInput('ticsAuthToken')
 }

@@ -7,20 +7,44 @@ const { config, ticsConfig, execCommands } = require('./src/github/configuration
 const { createIssueComment } = require('./src/github/api/issues/index');
 const { getPRChangedFiles } = require('./src/github/api/pulls/index');
 const { getQualityGates } = require('./src/tics/api/qualitygates/index');
+const { getInstallTicsLink, getCommand, osEnum } = require('./src/tics/api/installTics/index');
 const { getErrorSummary, getQualityGateSummary, getLinkSummary, getFilesSummary } = require('./src/tics/helpers/summary/index');
 
 if (config.eventname === 'pull_request' && config.eventpayload.action !== 'closed') {
-    runTICSClient();
+    bootstrapTICS();
 } else {
     core.setFailed("This action is running only on pull requests events.");
 }
 
-async function runTICSClient() {
+async function bootstrapTICS() {
+    try {
+        if (ticsConfig.installTics === 'true') {
+            if (process.env.RUNNER_OS === osEnum.MACOS) {
+                postSummary("MacOS is not yet supported. Please use windows or ubuntu instead.", true);
+            }
+
+            getInstallTicsLink().then((installTicsUrl) => {
+                return installTicsUrl;
+            }).then((installTicsUrl) => {
+                let command = installTicsUrl ? getCommand(installTicsUrl) : postSummary("There is an issue with retrieving your configuration.", true);
+                runTICSClient(command);
+            })
+
+        } else {
+            runTICSClient(execCommands.ticsClientViewer);
+        }
+    
+    } catch (error) {
+       core.setFailed(error.message);
+    }
+}
+
+async function runTICSClient(command) {
     try {
         core.info(`\u001b[35m > Analysing new pull request for project ${ticsConfig.projectName}.`)
-        core.info(`Invoking: ${execCommands.ticsClientViewer  }`);
+        core.info(`Invoking: ${command}`);
 
-        exec(execCommands.ticsClientViewer, (error, stdout, stderr) => {
+        exec(command, (error, stdout, stderr) => {
             if (error && error.code != 0) {
                 core.info(stderr);
                 core.info(stdout);
@@ -38,8 +62,17 @@ async function runTICSClient() {
             } else {
                 core.info(stdout);
 
-                let explorerUrl = stdout.match(/http.*Explorer.*/g).slice(-1).pop();
-                core.info(`\u001b[35m > Explorer url retrieved ${explorerUrl}`);
+                let locateExplorerUrl = stdout.match(/http.*Explorer.*/g);
+                let explorerUrl = "";
+                
+                if (!!locateExplorerUrl) {
+                    explorerUrl = locateExplorerUrl.slice(-1).pop();
+                    core.info(`\u001b[35m > Explorer url retrieved ${explorerUrl}`); 
+                } else {
+                    postSummary("There is a problem while running TICS Client Viewer", true);
+                    core.setFailed("There is a problem while running TICS Client Viewer.");
+                    return;
+                }
                 
                 getPRChangedFiles().then((changeSet) => {
                     core.info(`\u001b[35m > Retrieving changed files to analyse`);
