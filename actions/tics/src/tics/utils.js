@@ -14,7 +14,7 @@ const doHttpRequest = (url) => {
     }
     
     let authToken = core.getInput('ticsAuthToken');
-    console.log("http request options config: ", autToken);
+    console.log("http request options config: ", authToken);
     let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
     console.log(" http request options: ", options);
     let req = https.get(url, options, (res) => {
