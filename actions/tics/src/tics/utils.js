@@ -12,14 +12,15 @@ const doHttpRequest = (url) => {
     }
 
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
-    
-    let req = http.get(url, options, (res) => {
+    console.log("url: ", url, " options: ", options);
+    let req = https.get(url, options, (res) => {
       let body = [];
       res.on('data', (chunk) => {
         body += chunk;
       })
 
       res.on('end', () => {
+        console.log("res ", res);
           if (res.statusCode === 200) {
             console.log("Quality Gates success.")
             resolve(JSON.parse(body));
