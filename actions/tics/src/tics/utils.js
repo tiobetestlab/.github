@@ -4,21 +4,23 @@ const https = require('https');
 const { ticsConfig } = require('../github/configuration');
 
 const doHttpRequest = (url) => {
+  console.log("http request url ", url);
   return new Promise((resolve, reject) => {
     const client = (url.protocol === 'http') ? http : https; //FIX ME
-
+    console.log("http request client ", client);
     const optionsInit = {
       followAllRedirects: true
     }
-
+    console.log("http request options init ", optionsInit);
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
-    console.log("url: ", url, " options: ", options);
+    console.log(" http request options: ", options);
     let req = https.get(url, options, (res) => {
+      console.log(" http request get. ");
       let body = [];
       res.on('data', (chunk) => {
         body += chunk;
       })
-
+      console.log(" http request body: ", body);
       res.on('end', () => {
         console.log("res ", res);
           if (res.statusCode === 200) {
