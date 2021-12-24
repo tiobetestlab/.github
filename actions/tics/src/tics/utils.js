@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const http = require('http');
 const https = require('https');
-const { ticsConfig, config } = require('../github/configuration');
+const { ticsConfig } = require('../github/configuration');// FIX ME, import does not work
 
 const doHttpRequest = (url) => {
 
@@ -13,20 +13,17 @@ const doHttpRequest = (url) => {
     }
     
     let authToken = core.getInput('ticsAuthToken');
-    console.log("http request options config: ", authToken);
     let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
-    console.log(" http request options: ", options);
+
     let req = https.get(url, options, (res) => {
-      console.log(" http request get. ");
       let body = [];
+      
       res.on('data', (chunk) => {
         body += chunk;
       })
-      console.log(" http request body: ", body);
+      
       res.on('end', () => {
-        console.log("res ", res);
           if (res.statusCode === 200) {
-            console.log("Quality Gates success.")
             resolve(JSON.parse(body));
           } else {
             core.setFailed("HTTP request failed with status ", res.statusCode, ". Please try again by setting a ticsAuthToken in your configuration.")
