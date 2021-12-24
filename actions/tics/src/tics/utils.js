@@ -13,7 +13,7 @@ const doHttpRequest = (url) => {
 
     let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
     
-    let req = client.get(url, options, (res) => {
+    let req = https.get(url, options, (res) => {
       let body = [];
       res.on('data', (chunk) => {
         body += chunk;
