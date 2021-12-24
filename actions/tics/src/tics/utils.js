@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const http = require('http');
 const https = require('https');
-const core = require('@actions/core');
 const { ticsConfig, config } = require('../github/configuration');
 
 const doHttpRequest = (url) => {
