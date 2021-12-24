@@ -21,6 +21,7 @@ const doHttpRequest = (url) => {
 
       res.on('end', () => {
           if (res.statusCode === 200) {
+            console.log("Quality Gates success.")
             resolve(JSON.parse(body));
           } else {
             core.setFailed("HTTP request failed with status ", res.statusCode, ". Please try again by setting a ticsAuthToken in your configuration.")
