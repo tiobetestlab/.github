@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const http = require('http');
 const https = require('https');
+const core = require('@actions/core');
 const { ticsConfig, config } = require('../github/configuration');
 
 const doHttpRequest = (url) => {
@@ -12,9 +13,9 @@ const doHttpRequest = (url) => {
       followAllRedirects: true
     }
     
-    console.log("http request options config: ", ticsConfig);
-    console.log("http request options config: ", config);
-    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
+    let authToken = core.getInput('ticsAuthToken');
+    console.log("http request options config: ", autToken);
+    let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
     console.log(" http request options: ", options);
     let req = https.get(url, options, (res) => {
       console.log(" http request get. ");
