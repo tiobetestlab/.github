@@ -14,9 +14,11 @@ jobs:
         uses: ./
         env: 
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          TICS: "http://localhost:20221/tiobeweb/2022.1/api/cfg?name=cfg2"
         with:
-          projectName: 'tics_action'                                        # mandatory, default value is the project name that this action is running on
-          branchName: 'andriopoulou-danai-patch-1'                          # mandatory, default value is the branch name that this action is running on
-          branchDir: '/home/danai/Tics-Plugins/tics_action'                 # mandatory
-          ticsViewerUrl: 'http://localhost:20212/tiobeweb/2021.2/'          # mandatory
-          clientToken: 'githubToken'
+          projectName: 'js1'
+          branchName: 'main'
+          ticsViewerUrl: 'http://localhost:20221/tiobeweb/2022.1/'
+          clientToken: 'danai'
+          calc: 'CW,CS,FANOUT,CY,DUP'
+          installTics: true
