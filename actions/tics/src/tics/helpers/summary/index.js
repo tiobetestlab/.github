@@ -6,11 +6,9 @@ const { generateLinkMarkdown,
 
 const getErrorSummary = (errorList) => {
     let errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
-    
-    if (errorList && Array.isArray(errorList)) {
-        errorList.forEach (item => {
-          errorMessage += `> :x: ${item}\r\n`
-        });
+
+   if (errorList && Array.isArray(errorList)) {
+       errorList.forEach(item => errorMessage += `> :x: ${item}\r\n`); 
     } else {
         errorMessage += `> :x: ${errorList}\r\n`
     }
