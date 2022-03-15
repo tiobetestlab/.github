@@ -5,7 +5,10 @@ const { ticsConfig } = require('../github/configuration');
 
 const doHttpRequest = (url) => {
   return new Promise((resolve, reject) => {
-    const client = (url.protocol === 'http') ? http : https; //FIX ME
+    
+    let tempUrl = new URL(url);
+    let urlProtocol = tempUrl.protocol.replace(":", "");
+    const client = (urlProtocol === 'http') ? http : https; //FIX ME
 
     const optionsInit = {
       followAllRedirects: true
