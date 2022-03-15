@@ -19,6 +19,10 @@ const getErrorSummary = (errorList) => {
 }
 
 const getQualityGateSummary = (qualityGateObj) => {
+    if (!qualityGateObj) {
+       return "";
+    }
+    
     let gatesConditionsSummary = '';
 
     qualityGateObj.gates && qualityGateObj.gates.forEach(gate => {
