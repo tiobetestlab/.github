@@ -14,7 +14,8 @@ const doHttpRequest = (url) => {
       followAllRedirects: true
     }
 
-    let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
+    //let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
+    let options = optionsInit; //FIX ME
     
     let req = client.get(url, options, (res) => {
       let body = [];
@@ -49,7 +50,13 @@ const doHttpRequestNoAuth = (url) => {
       let body = [];
       res.on('data', (chunk) => {
         body += chunk;
-      })
+      })Hello Maikel
+
+I saw your comment in one of Jenkins tickets about TICSAUTHTOKEN https://redmine.tiobe.com/issues/29277#note-3
+
+And there is a similar one in another ticket
+
+And indeed I agree, however, the
 
       res.on('end', () => {
           if (res.statusCode === 200) {
