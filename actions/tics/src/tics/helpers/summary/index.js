@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const { generateLinkMarkdown,
     generateStatusMarkdown,
     generateTableMarkdown,
-    generateExpandableAreaMarkdown } = require('markdownGenerator');
+    generateExpandableAreaMarkdown } = require('./markdownGenerator');
 
 const getErrorSummary = (errorList) => {
     let errorMessage = `## TICS Quality Gate\r\n\r\n### :x: Failed \r\n\r\n #### The following errors have occured during analysis:\r\n\r\n`;
