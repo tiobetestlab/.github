@@ -42,7 +42,7 @@ const getFilesSummary = (fileList) => {
 * Helper methods to generate markdown
 */
 const getQGCondtionsSummary = (conditions) => {
-    let gatesConditionsSummary = '';
+    let out = '';
     
     conditions.forEach(condition => {
         if (condition.skipped !== true) {
@@ -50,32 +50,27 @@ const getQGCondtionsSummary = (conditions) => {
 
             if (condition.details !== null && condition.details.items.length > 0) {
                 let headers = [];
-                headers.push(condition.details.dataKeys.actualValue.itemType, condition.details.dataKeys.actualValue.title);
+                headers.push("File", condition.details.dataKeys.actualValue.title);
+                let cells = getTableCellsDetails(condition.details.items.filter(item => item.itemType === "file"));
 
-                let cells = getTableCellsDetails(condition.details.items);
-
-                gatesConditionsSummary += generateExpandableAreaMarkdown(gateConditionWithIcon, generateTableMarkdown(headers, cells)) + '\n\n\n';
+                out += generateExpandableAreaMarkdown(gateConditionWithIcon, generateTableMarkdown(headers, cells)) + '\n\n\n';
             } else {
-                gatesConditionsSummary += gateConditionWithIcon + ' \n\n\n';
+                out += gateConditionWithIcon + ' \n\n\n';
             }
         }
     })
     
-    return gatesConditionsSummary;
+    return out;
 }
 
 const getTableCellsDetails = (items) => {
-    let cells = [];
-    
-    items.forEach(item => {
-        cells.push({
-            name: item.name,
-            link: core.getInput('ticsViewerUrl') + item.link,
-            score: item.data.actualValue.formattedValue
-        });
-    })
-    
-    return cells;
+    return items.map((item) => {
+        return {
+                 name: item.name,
+                 link: core.getInput('ticsViewerUrl') + item.link,
+                 score: item.data.actualValue.formattedValue
+               };
+    });
 }
 
 module.exports = {

@@ -2,19 +2,12 @@ const generateLinkMarkdown = (text, link) => {
     return Boolean(text) && Boolean(link) ? `[${text}](${link})` : '';
 }
 
-const generateStatusMarkdown = (truthCondition, text) => {
-    let status = "";
-    
-    switch (truthCondition) {
-        case true:
-            status = ':heavy_check_mark: ' + (text ? 'Passed ' : '');
-            break;
-        case false:
-            status = ':x: ' + (text ? 'Failed ' : '');
-            break;
+const generateStatusMarkdown = (passed, hasSuffix) => {
+    if (passed) {
+        return ':heavy_check_mark: ' + (hasSuffix ? 'Passed ' : '');
+    } else {
+        return ':x: ' + (hasSuffix ? 'Failed ' : '');
     }
-    
-    return status;
 }
 
 /**
@@ -28,27 +21,19 @@ const generateStatusMarkdown = (truthCondition, text) => {
 *  | Content Cell  | Content Cell  |
 */
 const generateTableMarkdown = (headers, cells) => {
-    let tableText = `\n ${generateTableHeaders(headers, true)} ${generateTableHeaders(headers, false)}`;
+    let row = `\n ${generateTableHeaders(headers, true)} ${generateTableHeaders(headers, false)}`;
     
     cells.forEach(cell => {
-        tableText += `|  ${generateLinkMarkdown(cell.name, cell.link)} | ${cell.score} | \n`
+        row += `|  ${generateLinkMarkdown(cell.name, cell.link)} | ${cell.score} | \n`
     })
     
-    return tableText;
+    return row;
 }
 
 const generateTableHeaders = (array, isHeader) => {
-  let tableText = '';
-
-  array && array.map((header, i, arr) => {
-        if (arr.length - 1 === i) {
-            tableText = tableText.substring(0, tableText.length - 1);
-        }
-
-        tableText += isHeader ? `| ${header} |` : `| --- |`;
-    });
-    
-    return tableText + '\n';
+    return '|' + array.map((header) => {
+       return isHeader ? header : '---';
+    }).join('|') + '|' + '\n';
 }
 
 const generateExpandableAreaMarkdown = (title, body) => {
