@@ -23,7 +23,8 @@ let ticsConfig = {
     calc: core.getInput('calc'),
     ticsViewerUrl: core.getInput('ticsViewerUrl') ? core.getInput('ticsViewerUrl') : getSubstring(config.ticsEnv, "api", ""),
     viewerToken: core.getInput('clientToken'),
-    ticsAuthToken: core.getInput('ticsAuthToken')
+    ticsAuthToken: core.getInput('ticsAuthToken'),
+    installTics: core.getInput('installTics')
 }
 
 let osconf = {

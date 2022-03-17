@@ -1,28 +1,26 @@
 const core = require('@actions/core');
 const http = require('http');
 const https = require('https');
-const { ticsConfig } = require('../github/configuration');
+const { ticsConfig } = require('../github/configuration');// FIX ME, import does not work
 
 const doHttpRequest = (url) => {
+
   return new Promise((resolve, reject) => {
     
     let tempUrl = new URL(url);
     let urlProtocol = tempUrl.protocol.replace(":", "");
     const client = (urlProtocol === 'http') ? http : https; //FIX ME
-
-    const optionsInit = {
-      followAllRedirects: true
-    }
-
-    //let options = ticsConfig.ticsAuthToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + ticsConfig.ticsAuthToken } } : optionsInit
-    let options = optionsInit; //FIX ME
     
+    let authToken = core.getInput('ticsAuthToken');
+    let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
+
     let req = client.get(url, options, (res) => {
       let body = [];
+      
       res.on('data', (chunk) => {
         body += chunk;
       })
-
+      
       res.on('end', () => {
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));

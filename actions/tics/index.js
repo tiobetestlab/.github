@@ -18,14 +18,17 @@ if (config.eventname === 'pull_request' && config.eventpayload.action !== 'close
 
 async function bootstrapTICS() {
     try {
+        console.log("installTics value: ", ticsConfig.installTics);
         if (ticsConfig.installTics === 'true') {
             if (process.env.RUNNER_OS === osEnum.MACOS) {
                 postSummary("MacOS is not yet supported. Please use windows or ubuntu instead.", true);
             }
-
+            console.log("About to get the tics install url. ");
             getInstallTicsLink().then((installTicsUrl) => {
+                console.log("Got the tics install url: ", installTicsUrl);
                 return installTicsUrl;
             }).then((installTicsUrl) => {
+                console.log("About to execute the bootstrap & TICS Invocation. ");
                 let command = installTicsUrl ? getCommand(installTicsUrl) : postSummary("There is an issue with retrieving your configuration.", true);
                 runTICSClient(command);
             })
