@@ -6,16 +6,15 @@ const { ticsConfig } = require('../github/configuration');// FIX ME, import does
 const doHttpRequest = (url) => {
 
   return new Promise((resolve, reject) => {
-    const client = (url.protocol === 'http') ? http : https; //FIX ME
-
-    const optionsInit = {
-      followAllRedirects: true
-    }
+    
+    let tempUrl = new URL(url);
+    let urlProtocol = tempUrl.protocol.replace(":", "");
+    const client = (urlProtocol === 'http') ? http : https; //FIX ME
     
     let authToken = core.getInput('ticsAuthToken');
     let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
 
-    let req = https.get(url, options, (res) => {
+    let req = client.get(url, options, (res) => {
       let body = [];
       
       res.on('data', (chunk) => {
@@ -50,7 +49,7 @@ const doHttpRequestNoAuth = (url) => {
       res.on('data', (chunk) => {
         body += chunk;
       })
-
+      
       res.on('end', () => {
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
