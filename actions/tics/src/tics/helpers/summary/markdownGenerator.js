@@ -1,3 +1,5 @@
+const { ticsConfig } = require('../../../github/configuration');
+
 const generateLinkMarkdown = (text, link) => {
     return Boolean(text) && Boolean(link) ? `[${text}](${link})` : '';
 }
@@ -24,7 +26,7 @@ const generateTableMarkdown = (headers, cells) => {
     let row = `\n ${generateTableHeaders(headers, true)} ${generateTableHeaders(headers, false)}`;
     
     cells.forEach(cell => {
-        row += `|  ${generateLinkMarkdown(cell.name, cell.link)} | ${cell.score} | \n`
+        row += `|  ${generateLinkMarkdown(cell.name, ticsConfig.ticsViewerUrl + cell.link)} | ${cell.score} | \n`
     })
     
     return row;

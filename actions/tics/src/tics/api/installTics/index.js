@@ -1,5 +1,5 @@
  const core = require('@actions/core');
- const { doHttpRequestNoAuth, getSubstring } = require('../../utils');
+ const { doHttpRequest } = require('../../utils');
  const { ticsConfig, config, execCommands } = require('../../../github/configuration');
 
  const osEnum = {
@@ -13,16 +13,19 @@
     let command2 = `${execCommands.ticsClientViewer}`;
     
     switch(process.env.RUNNER_OS) {
-        case osEnum.LINUX:
+        case osEnum.LINUX: {
             let command1 = `source <(curl -s \\\"${installTicsUrl}\\\")`;
             command = `bash -c \"${command1} && ${command2}\"`;
             break;
-        case osEnum.WINDOWS:
+        }
+        case osEnum.WINDOWS: {
             let command3 = `Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('${installTicsUrl}'))`
             command = `powershell \"${command3}; if ($LASTEXITCODE -eq 0) { ${command2} }\"`;
             break;
-        default: 
+        }
+        default: {
             //
+        }
     }
 
     return command;
@@ -41,7 +44,7 @@
      
         console.log("\u001b[35m > Trying to retrieve configuration information from: ", getAPIEndpoint())
 
-        let configInfo = await doHttpRequestNoAuth(getAPIEndpoint()).then((data) => {
+        let configInfo = await doHttpRequest(getAPIEndpoint()).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data.links.installTics), //FIX ME; do a check
@@ -57,7 +60,7 @@
         return installTICSUrl;
 
     } catch (error) {
-        core.setFailed("An error occured when trying to retrieve configuration information ", error);
+        core.setFailed("An error occured when trying to retrieve configuration information " + error);
     }
 }
 

@@ -46,7 +46,7 @@ const getQGCondtionsSummary = (conditions) => {
     
     conditions.forEach(condition => {
         if (condition.skipped !== true) {
-            const gateConditionWithIcon = `${generateStatusMarkdown(condition.passed, false)}  ${condition.descriptionText}`; 
+            const gateConditionWithIcon = `${generateStatusMarkdown(condition.passed, false)}  ${condition.message}`; 
 
             if (condition.details !== null && condition.details.items.length > 0) {
                 let headers = [];
