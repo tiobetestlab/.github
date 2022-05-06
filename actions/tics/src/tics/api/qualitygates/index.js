@@ -1,20 +1,18 @@
  const core = require('@actions/core');
- const { doHttpRequest, getSubstring } = require('../../utils');
+ const { doHttpRequest } = require('../../utils');
  const { ticsConfig } = require('../../../github/configuration');
- const { execCommands } = require('../../../github/configuration');
 
- const getAPIEndpoint = (link) => {
-    let qgBaseAPI = `${ticsConfig.ticsViewerUrl}api/private/qualitygate/Status?`; //FIX ME
-    qgBaseAPI += getSubstring(link, "axes", "Window");
+ const getAPIEndpoint = () => {
+    let qgBaseAPI = `${ticsConfig.ticsViewerUrl}api/public/v1/QualityGateStatus?project=${ticsConfig.projectName}&branch=${ticsConfig.branchName}&fields=details,annotationsApiV1Links`;
     
     return qgBaseAPI;
  }
 
- const getQualityGates = async(link) => {
+ const getQualityGates = async() => {
     try {
      
-        console.log("\u001b[35m > Trying to retrieve quality gates from ", getAPIEndpoint(link))
-        let qualityGates = await doHttpRequest(getAPIEndpoint(link)).then((data) => {
+        console.log("\u001b[35m > Trying to retrieve quality gates from ", getAPIEndpoint())
+        let qualityGates = await doHttpRequest(getAPIEndpoint()).then((data) => {
             let response = {
                 statusCode: 200,
                 body: JSON.stringify(data),
@@ -33,7 +31,7 @@
         return qualityGateObj;
 
     } catch (error) {
-        core.setFailed("An error occured when trying to retrieve quality gates ", error);
+        core.setFailed("An error occured when trying to retrieve quality gates " + error);
     }
 }
 

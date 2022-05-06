@@ -28,7 +28,7 @@ const getPRChangedFiles =  async() => {
        await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/files', getParams()).then((response) => {
             core.debug(`Getting the changed files list ${response.data}`)
 
-            response.data && response.data.map((item, i) => {
+            response.data && response.data.map((item) => {
                 changedFiles += item.filename + " ,"
             })
 

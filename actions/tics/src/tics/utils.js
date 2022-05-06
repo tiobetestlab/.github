@@ -9,8 +9,11 @@ const doHttpRequest = (url) => {
     
     let tempUrl = new URL(url);
     let urlProtocol = tempUrl.protocol.replace(":", "");
-    const client = (urlProtocol === 'http') ? http : https; //FIX ME
+    const client = (urlProtocol === 'http') ? http : https;
     
+    const optionsInit = {
+      followAllRedirects: true
+    }
     let authToken = core.getInput('ticsAuthToken');
     let options = authToken ? {...optionsInit, headers: {'Authorization': 'Basic ' + authToken } } : optionsInit
 
@@ -25,40 +28,13 @@ const doHttpRequest = (url) => {
           if (res.statusCode === 200) {
             resolve(JSON.parse(body));
           } else {
-            core.setFailed("HTTP request failed with status ", res.statusCode, ". Please try again by setting a ticsAuthToken in your configuration.")
+            core.setFailed("HTTP request failed with status " + res.statusCode + ". Please try again by setting a ticsAuthToken in your configuration.");
           }
       })
     });
 
     req.on('error', error => {
-      core.setFailed("HTTP request error: ", error)
-      reject(error.message);
-    })
-
-    req.end();
-  });
-}
-
-/* Work-around should be removed */
-const doHttpRequestNoAuth = (url) => {
-  return new Promise((resolve, reject) => {
-
-    let req = https.get(url, (res) => {
-
-      let body = [];
-      res.on('data', (chunk) => {
-        body += chunk;
-      })
-      
-      res.on('end', () => {
-          if (res.statusCode === 200) {
-            resolve(JSON.parse(body));
-          }
-      })
-    });
-
-    req.on('error', error => {
-      console.error("HTTP request error: ", error)
+      core.setFailed("HTTP request error: " + error)
       reject(error.message);
     })
 
@@ -75,7 +51,6 @@ const getSubstring = (value, del1, del2) => {
 }
 
 module.exports = {
-    doHttpRequestNoAuth: doHttpRequestNoAuth,
     doHttpRequest: doHttpRequest,
     getSubstring: getSubstring
 }
