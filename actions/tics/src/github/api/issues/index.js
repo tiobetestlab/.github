@@ -24,6 +24,8 @@ const getParams = (inputparams) => {
 const createIssueComment =  async(params) => {
     try {
         core.info(`\u001b[35m > Posting pull request decoration`);
+        console.log(" 1 =======================> ", config.eventpayload.pull_request.number);
+        console.log(" 2 =======================> ", process.env.GITHUB_EVENT_PATH.pull_request.number);
         await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', getParams(params))
     } catch(e) {
         console.log("Create issue comment failed: ", e)
